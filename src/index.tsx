@@ -65,7 +65,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
   render() {
     return <section>
       <header>
-        <ManhattanPlot serverUrl="/api" onSignificanceChanged={this.onSignificanceChanged.bind(this)}
+        <ManhattanPlot serverUrl='/api' onSignificanceChanged={this.onSignificanceChanged.bind(this)}
                        onWindowChanged={this.onWindowChanged.bind(this)}/>
         <button onClick={this.onLoad.bind(this)}>Load Window</button>
       </header>

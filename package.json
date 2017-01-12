@@ -84,11 +84,18 @@
     "webpack-dev-server": "2.1.0-beta.10"
   },
   "dependencies": {
-    "lineupjs": "1.0.0",
-    "font-awesome": "4.6.3",
-    "@types/bootstrap": "3.3.32",
-    "bootstrap-sass": "3.3.7",
-    "datavisyn-scatterplot": "github:datavisyn/datavisyn-scatterplot"
+    "@types/react": "^0.14.55",
+    "@types/react-dom": "^0.14.20",
+    "@types/d3-array": "^1.0.5",
+    "d3-array": "^1.0.1",
+    "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
+    "font-awesome": "^4.6.3",
+    "lineupjs": "github:Caleydo/lineup#master",
+    "mobx": "^2.6.0",
+    "mobx-react": "^3.5.8",
+    "mobx-react-devtools": "^4.2.9",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
   },
   "name": "snp_app",
   "description": "",

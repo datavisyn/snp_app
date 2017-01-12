@@ -9,11 +9,16 @@ import os
 # Force matplotlib to not use any Xwindows backend.
 matplotlib.use('Agg')
 
-conn = sqlite3.connect(os.path.normpath(os.path.dirname(__file__) + '/../data/db.sqlite'))
+
+def get_db():
+  db = getattr(flask.g, '_database', None)
+  if db is None:
+    db = flask.g._database = sqlite3.connect(os.path.normpath(os.path.dirname(__file__) + '/../data/db.sqlite'))
+  return db
 
 
 def _to_abs_position(chromosome, location):
-  r = conn.execute('SELECT shift, length FROM chromosome WHERE chr_name = ?', (chromosome,)).fetchone()
+  r = get_db().execute('SELECT shift, length FROM chromosome WHERE chr_name = ?', (chromosome,)).fetchone()
   shift = r[0]
   length = r[1]
   # clamp to max length
@@ -23,7 +28,7 @@ def _to_abs_position(chromosome, location):
 
 
 def chromosome_get():
-  chromosomes = pd.read_sql('select * from chromosome order by rowid', con=conn)
+  chromosomes = pd.read_sql('select * from chromosome order by rowid', con=get_db())
 
   r = chromosomes.to_json(orient='records')
   return flask.Response(r, mimetype='application/json')
@@ -31,7 +36,7 @@ def chromosome_get():
 
 def manhattan_meta_get(geqSignificance=None):
   import numpy as np
-  chromosomes = pd.read_sql('select * from chromosome order by rowid', con=conn).to_records()
+  chromosomes = pd.read_sql('select * from chromosome order by rowid', con=get_db()).to_records()
 
   def to_meta(chromosome):
     return dict(name=chromosome.chr_name, shift=long(chromosome.shift), start=long(chromosome.start + chromosome.shift),
@@ -39,8 +44,8 @@ def manhattan_meta_get(geqSignificance=None):
 
   x_max = chromosomes[-1].length + chromosomes[-1].shift
 
-  r = conn.execute('SELECT min(pval) FROM snp WHERE pval <= ?',
-                   (sig2pval(geqSignificance) if geqSignificance is not None else 1,)).fetchone()
+  r = get_db().execute('SELECT min(pval) FROM snp WHERE pval <= ?',
+                       (sig2pval(geqSignificance) if geqSignificance is not None else 1,)).fetchone()
   y_max = float(-np.log10(r[0]))
   return dict(ylim=[0, y_max], xlim=[0, long(x_max)],
               chromosomes=[to_meta(d) for d in chromosomes])
@@ -49,7 +54,6 @@ def manhattan_meta_get(geqSignificance=None):
 def sig2pval(sig):
   import numpy as np
   r = float(np.exp(-sig))
-  print(sig, r)
   return r
 
 
@@ -57,7 +61,6 @@ def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
   import numpy as np
   import matplotlib.pyplot as plt
   from io import BytesIO
-  import json
   import os.path
 
   cache_key = os.path.normpath(
@@ -71,7 +74,7 @@ def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
                            mimetype='image/png')
 
   # http://stackoverflow.com/questions/37463184/how-to-create-a-manhattan-plot-with-matplotlib-in-python
-  chromosomes = pd.read_sql('select * from chromosome order by rowid', con=conn).to_records()
+  chromosomes = pd.read_sql('select * from chromosome order by rowid', con=get_db()).to_records()
 
   fig = plt.figure()
   ax = fig.add_subplot(111)
@@ -84,7 +87,7 @@ def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
   for num, chromosome in enumerate(chromosomes):
     group = pd.read_sql(
       'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
-      params=(sig2pval(geqSignificance) if geqSignificance is not None else 1, chromosome.chr_name), con=conn)
+      params=(sig2pval(geqSignificance) if geqSignificance is not None else 1, chromosome.chr_name), con=get_db())
 
     # -log_10(pvalue)
     group['minuslog10pvalue'] = -np.log10(group.pval)
@@ -135,7 +138,7 @@ def data_get(fromChromosome, fromLocation, toChromosome, toLocation, geqSignific
 
   query = 'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where abs_location between ? and ? and pval <= ? order by abs_location'
   params = (abs_from, abs_to, 1 if geqSignificance is None else sig2pval(geqSignificance),)
-  data = pd.read_sql(query, params=params, con=conn)
+  data = pd.read_sql(query, params=params, con=get_db())
 
   r = data.to_json(orient='records')
   return flask.Response(r, mimetype='application/json')

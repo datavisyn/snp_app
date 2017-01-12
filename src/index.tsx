@@ -65,7 +65,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
   render() {
     return <section>
       <header>
-        <ManhattanPlot serverUrl=".." onSignificanceChanged={this.onSignificanceChanged.bind(this)}
+        <ManhattanPlot serverUrl="/api" onSignificanceChanged={this.onSignificanceChanged.bind(this)}
                        onWindowChanged={this.onWindowChanged.bind(this)}/>
         <button onClick={this.onLoad.bind(this)}>Load Window</button>
       </header>
@@ -88,7 +88,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
     const significance = state.significance;
     if (w) {
       console.log('get data');
-      (self as any).fetch(`../data?fromChromosome=${w.fromChromosome}&fromLocation=${w.fromLocation}&toChromosome=${w.toChromosome}&toLocation=${w.toLocation}&geqSignificance=${significance}`)
+      (self as any).fetch(`/api/data?fromChromosome=${w.fromChromosome}&fromLocation=${w.fromLocation}&toChromosome=${w.toChromosome}&toLocation=${w.toLocation}&geqSignificance=${significance}`)
         .then((r) => r.json())
         .then((data: Item[]) => {
           this.setState(toState(data));

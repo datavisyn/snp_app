@@ -20,6 +20,7 @@ __pycache__/
 node_modules/
 /static/
 /src/**/*.js
+/src/**/*.jsx
 /tests/**/*.js
 *.map
 *.css

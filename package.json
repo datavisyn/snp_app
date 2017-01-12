@@ -32,7 +32,7 @@
     "build:python": "python -c \"from distutils.dir_util import mkpath ; mkpath('./build/source')\" && (tar -c ./snp_app --exclude '*.pyc' | tar -xC build/source)",
     "build:web": "webpack --env prod",
     "predist:web": "npm run build",
-    "dist:web": "mkdirp dist && cd build && tar cvzf ../dist/snp_app.tar.gz *",
+    "dist:web": "mkdirp dist && cd static && tar cvzf ../dist/snp_app.tar.gz *",
     "dist:python": "python setup.py bdist_egg"
   },
   "files": [

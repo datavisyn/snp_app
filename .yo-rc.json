@@ -1,0 +1,36 @@
+{
+  "generator-phovea": {
+    "type": "app-slib",
+    "app": "SNP App",
+    "clientOnly": false,
+    "entries": {
+      "app": "./src/index.ts"
+    },
+    "libraries": [
+      "lineupjs",
+      "font-awesome",
+      "bootstrap",
+      "datavisyn-scatterplot"
+    ],
+    "modules": [],
+    "sextensions": [],
+    "unknown": {
+      "requirements": [],
+      "dockerPackages": []
+    },
+    "libraryAliases": {},
+    "libraryExternals": [
+      "lineupjs",
+      "font-awesome",
+      "bootstrap",
+      "bootstrap-sass",
+      "datavisyn-scatterplot"
+    ],
+    "ignores": [],
+    "extensions": [],
+    "name": "snp_app",
+    "author": "Samuel Gratzl",
+    "today": "Thu, 12 Jan 2017 20:12:49 GMT",
+    "githubAccount": "datavisyn"
+  }
+}

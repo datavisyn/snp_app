@@ -4,7 +4,7 @@
     "app": "SNP App",
     "clientOnly": false,
     "entries": {
-      "app": "./src/index.ts"
+      "app": "./src/index.tsx"
     },
     "libraries": [
       "lineupjs",

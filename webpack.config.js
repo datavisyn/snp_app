@@ -176,7 +176,7 @@ function generateWebpack(options) {
           secure: false
         }
       },
-      contentBase: resolve(__dirname, 'build')
+      contentBase: resolve(__dirname, 'static')
     }
   };
 

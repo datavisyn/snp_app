@@ -18,6 +18,7 @@ __pycache__/
 .tox
 .cache
 node_modules/
+/static/
 /src/**/*.js
 /tests/**/*.js
 *.map

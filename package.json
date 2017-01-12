@@ -90,7 +90,7 @@
     "d3-array": "^1.0.1",
     "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
     "font-awesome": "^4.6.3",
-    "lineupjs": "github:Caleydo/lineup#master",
+    "lineupjs": "github:Caleydo/lineupjs#master",
     "mobx": "^2.6.0",
     "mobx-react": "^3.5.8",
     "mobx-react-devtools": "^4.2.9",

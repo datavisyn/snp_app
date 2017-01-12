@@ -118,7 +118,7 @@ function generateWebpack(options) {
   let base = {
     entry: injectRegistry(options.entries),
     output: {
-      path: resolve(__dirname, 'build'),
+      path: resolve(__dirname, 'static'),
       filename: (options.name || (pkg.name + (options.bundle ? '_bundle' : ''))) + (options.min && !options.nosuffix ? '.min' : '') + '.js',
       publicPath: '' //no public path = relative
     },

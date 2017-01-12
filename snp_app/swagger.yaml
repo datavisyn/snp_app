@@ -1,0 +1,162 @@
+---
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "SNP Exploration REST API"
+paths:
+  /chromosome:
+    get:
+      tags:
+      - "default"
+      description: "Gets chromosome metadata\n"
+      operationId: "snp_app.default_controller.chromosome_get"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            title: "ArrayOfChromosomes"
+            items:
+              $ref: "#/definitions/Chromosome"
+  /data:
+    get:
+      tags:
+      - "default"
+      description: "get snp data for locus zoom and lineup\n"
+      operationId: "snp_app.default_controller.data_get"
+      parameters:
+      - name: "fromChromosome"
+        in: "query"
+        description: "chromosome start"
+        required: true
+        type: "string"
+      - name: "fromLocation"
+        in: "query"
+        description: "within chromosome start location"
+        required: true
+        type: "number"
+        format: "integer"
+      - name: "toChromosome"
+        in: "query"
+        description: "chromosome start"
+        required: true
+        type: "string"
+      - name: "toLocation"
+        in: "query"
+        description: "within chromosome end location"
+        required: true
+        type: "number"
+        format: "integer"
+      - name: "geqSignificance"
+        in: "query"
+        description: "filter the resulting containing just SNP having a significance\
+          \ >= the argument"
+        required: false
+        type: "number"
+        format: "double"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            title: "ArrayOfSNPs"
+            items:
+              $ref: "#/definitions/SNP"
+  /manhattan:
+    get:
+      tags:
+      - "default"
+      description: "Gets manhatta plot data\n"
+      operationId: "snp_app.default_controller.manhattan_get"
+      parameters:
+      - name: "geqSignificance"
+        in: "query"
+        description: "filter the resulting containing just SNP having a significance\
+          \ >= the argument"
+        required: false
+        type: "number"
+        format: "double"
+      - name: "plain"
+        in: "query"
+        description: "plain results no axes"
+        required: false
+        type: "boolean"
+      - name: "width"
+        in: "query"
+        description: "width of the plot in pixel (guessed)"
+        required: false
+        type: "number"
+        format: "integer"
+      - name: "height"
+        in: "query"
+        description: "height of the plot in pixel (guessed)"
+        required: false
+        type: "number"
+        format: "integer"
+      responses:
+        200:
+          description: "Successful response"
+  /manhattan_meta:
+    get:
+      tags:
+      - "default"
+      description: "Gets manhatta plot meta data\n"
+      operationId: "snp_app.default_controller.manhattan_meta_get"
+      parameters:
+      - name: "geqSignificance"
+        in: "query"
+        description: "filter the resulting containing just SNP having a significance\
+          \ >= the argument"
+        required: false
+        type: "number"
+        format: "double"
+      responses:
+        200:
+          description: "Successful response"
+definitions:
+  SNP:
+    properties:
+      refsnp_id:
+        type: "string"
+      chr_name:
+        type: "string"
+      chrom_start:
+        type: "number"
+        format: "integer"
+      allele1:
+        type: "string"
+      allele2:
+        type: "string"
+      freqA1:
+        type: "number"
+        format: "double"
+      beta:
+        type: "number"
+        format: "double"
+      se:
+        type: "number"
+        format: "double"
+      pval:
+        type: "number"
+        format: "double"
+      N:
+        type: "number"
+        format: "integer"
+  Chromosome:
+    properties:
+      chr_name:
+        type: "string"
+      start:
+        type: "number"
+        format: "integer"
+      end:
+        type: "number"
+        format: "integer"
+      derived:
+        type: "boolean"
+      length:
+        type: "number"
+        format: "integer"
+      shift:
+        type: "number"
+        format: "integer"

@@ -88,7 +88,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
     const significance = state.significance;
     if (w) {
       console.log('get data');
-      (self as any).fetch(`/api/data?fromChromosome=${w.fromChromosome}&fromLocation=${w.fromLocation}&toChromosome=${w.toChromosome}&toLocation=${w.toLocation}&geqSignificance=${significance}`)
+      (self as any).fetch(`/api/data?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)
         .then((r) => r.json())
         .then((data: Item[]) => {
           this.setState(toState(data));

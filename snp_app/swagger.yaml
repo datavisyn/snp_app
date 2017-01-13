@@ -25,29 +25,29 @@ paths:
       description: "get snp data for locus zoom and lineup\n"
       operationId: "snp_app.default_controller.data_get"
       parameters:
-      - name: "fromChromosome"
+      - name: "from_chromosome"
         in: "query"
         description: "chromosome start"
         required: true
         type: "string"
-      - name: "fromLocation"
+      - name: "from_location"
         in: "query"
         description: "within chromosome start location"
         required: true
         type: "number"
         format: "integer"
-      - name: "toChromosome"
+      - name: "to_chromosome"
         in: "query"
         description: "chromosome start"
         required: true
         type: "string"
-      - name: "toLocation"
+      - name: "to_location"
         in: "query"
         description: "within chromosome end location"
         required: true
         type: "number"
         format: "integer"
-      - name: "geqSignificance"
+      - name: "geq_significance"
         in: "query"
         description: "filter the resulting containing just SNP having a significance\
           \ >= the argument"
@@ -69,7 +69,7 @@ paths:
       description: "Gets manhatta plot data\n"
       operationId: "snp_app.default_controller.manhattan_get"
       parameters:
-      - name: "geqSignificance"
+      - name: "geq_significance"
         in: "query"
         description: "filter the resulting containing just SNP having a significance\
           \ >= the argument"
@@ -103,7 +103,7 @@ paths:
       description: "Gets manhatta plot meta data\n"
       operationId: "snp_app.default_controller.manhattan_meta_get"
       parameters:
-      - name: "geqSignificance"
+      - name: "geq_significance"
         in: "query"
         description: "filter the resulting containing just SNP having a significance\
           \ >= the argument"

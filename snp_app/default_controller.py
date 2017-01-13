@@ -34,7 +34,7 @@ def chromosome_get():
   return flask.Response(r, mimetype='application/json')
 
 
-def manhattan_meta_get(geqSignificance=None):
+def manhattan_meta_get(geq_significance=None):
   import numpy as np
   chromosomes = pd.read_sql('select * from chromosome order by rowid', con=get_db()).to_records()
 
@@ -45,7 +45,7 @@ def manhattan_meta_get(geqSignificance=None):
   x_max = chromosomes[-1].length + chromosomes[-1].shift
 
   r = get_db().execute('SELECT min(pval) FROM snp WHERE pval <= ?',
-                       (sig2pval(geqSignificance) if geqSignificance is not None else 1,)).fetchone()
+                       (sig2pval(geq_significance) if geq_significance is not None else 1,)).fetchone()
   y_max = float(-np.log10(r[0]))
   return dict(ylim=[0, y_max], xlim=[0, long(x_max)],
               chromosomes=[to_meta(d) for d in chromosomes])
@@ -57,13 +57,13 @@ def sig2pval(sig):
   return r
 
 
-def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
+def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
   import numpy as np
   import matplotlib.pyplot as plt
   from io import BytesIO
   import os.path
 
-  file_name = 'manhattan_{w}_{h}_{s}_{p}.png'.format(w=width, h=height, s=geqSignificance, p=plain)
+  file_name = 'manhattan_{w}_{h}_{s}_{p}.png'.format(w=width, h=height, s=geq_significance, p=plain)
   cache_key = os.path.normpath(os.path.dirname(__file__) + '/../tmp/' + file_name)
 
   if os.path.isfile(cache_key):
@@ -89,7 +89,7 @@ def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
   for num, chromosome in enumerate(chromosomes):
     group = pd.read_sql(
       'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
-      params=(sig2pval(geqSignificance) if geqSignificance is not None else 1, chromosome.chr_name), con=get_db())
+      params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name), con=get_db())
 
     # -log_10(pvalue)
     group['minuslog10pvalue'] = -np.log10(group.pval)
@@ -134,12 +134,12 @@ def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
   return result
 
 
-def data_get(fromChromosome, fromLocation, toChromosome, toLocation, geqSignificance=None):
-  abs_from = _to_abs_position(fromChromosome, fromLocation)
-  abs_to = _to_abs_position(toChromosome, toLocation)
+def data_get(from_chromosome, from_location, to_chromosome, to_location, geq_significance=None):
+  abs_from = _to_abs_position(from_chromosome, from_location)
+  abs_to = _to_abs_position(to_chromosome, to_location)
 
   query = 'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where abs_location between ? and ? and pval <= ? order by abs_location'
-  params = (abs_from, abs_to, 1 if geqSignificance is None else sig2pval(geqSignificance),)
+  params = (abs_from, abs_to, 1 if geq_significance is None else sig2pval(geq_significance),)
   data = pd.read_sql(query, params=params, con=get_db())
 
   r = data.to_json(orient='records')

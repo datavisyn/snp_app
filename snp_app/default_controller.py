@@ -63,15 +63,19 @@ def manhattan_get(width=None, height=None, geqSignificance=None, plain=None):
   from io import BytesIO
   import os.path
 
-  cache_key = os.path.normpath(
-    os.path.dirname(__file__) + '/../tmp/manhattan_{width}_{height}_{geqSignificance}_{plain}.png'.format(width=width,
-                                                                                                          height=height,
-                                                                                                          geqSignificance=geqSignificance,
-                                                                                                          plain=plain))
+  file_name = 'manhattan_{width}_{height}_{geqSignificance}_{plain}.png'.format(width=width,
+                                                                        height=height,
+                                                                        geqSignificance=geqSignificance,plain=plain)
+  cache_key = os.path.normpath(os.path.dirname(__file__) + '/../tmp/'+file_name)
+
   if os.path.isfile(cache_key):
-    return flask.send_file(cache_key, as_attachment=False,
-                           attachment_filename='manhattan.png',
-                           mimetype='image/png')
+    with open(cache_key) as f:
+      buffer = BytesIO()
+      buffer.write(f.read())
+      buffer.seek(0)
+      return flask.send_file(buffer, as_attachment=False,
+                               attachment_filename='manhattan.png',
+                               mimetype='image/png')
 
   # http://stackoverflow.com/questions/37463184/how-to-create-a-manhattan-plot-with-matplotlib-in-python
   chromosomes = pd.read_sql('select * from chromosome order by rowid', con=get_db()).to_records()

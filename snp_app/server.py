@@ -18,4 +18,4 @@ def root():
 
 app.app.register_blueprint(static_page)
 
-#print(app.app.url_map)
+# print(app.app.url_map)

@@ -1,6 +1,7 @@
 # general things to ignore
 /.tscache
 /.idea
+/data/
 /build/
 /dist/
 *.egg-info/

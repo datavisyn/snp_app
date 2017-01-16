@@ -39,6 +39,24 @@ paths:
             title: "ArrayOfSNPs"
             items:
               $ref: "#/definitions/SNP"
+  /data_count:
+    get:
+      tags:
+      - "default"
+      description: "get snp data count\n"
+      operationId: "snp_app.default_controller.data_count_get"
+      parameters:
+        - $ref: '#/parameters/geq_significance'
+        - $ref: '#/parameters/leq_significance'
+        - $ref: '#/parameters/from_chromosome'
+        - $ref: '#/parameters/from_location'
+        - $ref: '#/parameters/to_chromosome'
+        - $ref: '#/parameters/to_location'
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "number"
   /manhattan:
     get:
       tags:

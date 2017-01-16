@@ -90,8 +90,8 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
 
   for num, chromosome in enumerate(chromosomes):
     group = pd.read_sql(
-      'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
-      params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name), con=get_db())
+        'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
+        params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name), con=get_db())
 
     # -log_10(pvalue)
     group['minuslog10pvalue'] = -np.log10(group.pval)

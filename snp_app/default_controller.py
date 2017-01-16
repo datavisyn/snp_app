@@ -136,7 +136,7 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
   return result
 
 
-def _to_query(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
+def _to_snp_query(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
               leq_significance=None):
   params = []
   q = 'from snp s left join chromosome c on s.chr_name = c.chr_name '
@@ -164,7 +164,7 @@ def _to_query(from_chromosome=None, from_location=0, to_chromosome=None, to_loca
 
 def data_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
              leq_significance=None):
-  query_from_where, params = _to_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
+  query_from_where, params = _to_snp_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
                                        leq_significance)
 
   query = 'select s.*, (s.chrom_start + c.shift) as abs_location ' + query_from_where + ' order by abs_location'
@@ -176,8 +176,46 @@ def data_get(from_chromosome=None, from_location=0, to_chromosome=None, to_locat
 
 def data_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
                    leq_significance=None):
-  query_from_where, params = _to_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
+  query_from_where, params = _to_snp_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
                                        leq_significance)
+
+  query = 'select count(*) ' + query_from_where
+  count = get_db().execute(query, params).fetchone()[0]
+
+  return count
+
+
+def _to_exon_query(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint,):
+  params = []
+  q = 'from exon s left join chromosome c on s.chr_name = c.chr_name '
+  append = 'where'
+  if to_chromosome is not None and from_chromosome is None:
+    abs_to = _to_abs_position(to_chromosome, to_location)
+    q += append + ' (s.end + c.shift) <= ?'
+    append = 'and'
+    params.append(abs_to)
+  elif from_chromosome is not None:
+    abs_from = _to_abs_position(from_chromosome, from_location)
+    abs_to = _to_abs_position(to_chromosome or from_chromosome, to_location)
+    q += append + ' (s.start + c.shift) >= ? and (s.end + c.shift) <= ?'
+    append = 'and'
+    params.extend((abs_from, abs_to))
+
+  return q, params
+
+
+def exon_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint):
+  query_from_where, params = _to_exon_query(from_chromosome, from_location, to_chromosome, to_location)
+
+  query = 'select s.*, (s.start + c.shift) as abs_start, (s.end + c.shift) as abs_end ' + query_from_where + ' order by abs_start'
+  data = pd.read_sql(query, params=params, con=get_db())
+
+  r = data.to_json(orient='records')
+  return flask.Response(r, mimetype='application/json')
+
+
+def exon_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint):
+  query_from_where, params = _to_exon_query(from_chromosome, from_location, to_chromosome, to_location)
 
   query = 'select count(*) ' + query_from_where
   count = get_db().execute(query, params).fetchone()[0]

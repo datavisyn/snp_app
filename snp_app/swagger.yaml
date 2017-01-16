@@ -57,6 +57,41 @@ paths:
           description: "Successful response"
           schema:
             type: "number"
+  /exon:
+    get:
+      tags:
+      - "default"
+      description: "get exon data for locus zoom\n"
+      operationId: "snp_app.default_controller.exon_get"
+      parameters:
+        - $ref: '#/parameters/from_chromosome'
+        - $ref: '#/parameters/from_location'
+        - $ref: '#/parameters/to_chromosome'
+        - $ref: '#/parameters/to_location'
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            title: "ArrayOfExons"
+            items:
+              $ref: "#/definitions/Exon"
+  /exon_count:
+    get:
+      tags:
+      - "default"
+      description: "get exon data count\n"
+      operationId: "snp_app.default_controller.exon_count_get"
+      parameters:
+        - $ref: '#/parameters/from_chromosome'
+        - $ref: '#/parameters/from_location'
+        - $ref: '#/parameters/to_chromosome'
+        - $ref: '#/parameters/to_location'
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "number"
   /manhattan:
     get:
       tags:
@@ -184,5 +219,19 @@ definitions:
         type: "number"
         format: "int32"
       shift:
+        type: "number"
+        format: "int32"
+  Exon:
+    properties:
+      gene_name:
+        type: "string"
+      chr_name:
+        type: "string"
+      strand:
+        type: "string"
+      start:
+        type: "number"
+        format: "int32"
+      end:
         type: "number"
         format: "int32"

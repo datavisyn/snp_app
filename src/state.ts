@@ -33,6 +33,11 @@ export class Item {
     return -Math.log(this.pval) * Math.LOG10E;
   }
 
+  isLeadSNP() {
+    // TODO get real data
+    return this.mlogpval > 10;
+  }
+
   toString() {
     return `${this.refsnpId}: @${this.chrName}#${this.chromStart} p-value=${this.pval}`;
   }
@@ -48,6 +53,6 @@ export interface IWindow {
 export default class AppState {
   @observable selection: Item[] = [];
 
-  @observable significance: number = 1;
+  @observable significance: number = 5; //10^-5
   @observable window: IWindow = null;
 }

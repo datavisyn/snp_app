@@ -14,7 +14,7 @@ import * as React from 'react';
 /* tslint:enable */
 import {render} from 'react-dom';
 
-import LocusZoom from './ItemScatterplot';
+import LocusZoom, {circleSymbol} from './ItemScatterplot';
 import {IScatterplotOptions, scale} from 'datavisyn-scatterplot-react/src';
 import ManhattanPlot from 'datavisyn-scatterplot-react/src/ManhattanPlot';
 import LineUp from './ItemLineUp';
@@ -67,7 +67,7 @@ function defineLineUp(data: ADataProvider) {
 function toState(raw: any[]) {
   const data = raw.map((r) => new Item(r));
   const chromStartExtent = extent(data, (d) => d.chromStart);
-  const pvalMin = Math.min(50, max(data, (d) => d.mlogpval)); // rounding error
+  const pvalMin = Math.min(50, 3 + max(data, (d) => d.mlogpval)); // rounding error
   const desc = [
     {type: 'string', column: 'refsnpId'},
     {type: 'string', column: 'chrName'},
@@ -86,7 +86,8 @@ function toState(raw: any[]) {
     x: (d: Item) => d.chromStart,
     y: (d: Item) => d.mlogpval,
     xscale: scale.scaleLinear().domain(chromStartExtent),
-    yscale: scale.scaleLinear().domain([0, pvalMin]).clamp(true)
+    yscale: scale.scaleLinear().domain([0, pvalMin]).clamp(true),
+    symbol: circleSymbol()
   };
 
   return {data, options, desc};
@@ -97,7 +98,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
   render() {
     return <section>
       <header>
-        <ManhattanPlot serverUrl='/api' onSignificanceChanged={this.onSignificanceChanged.bind(this)}
+        <ManhattanPlot serverUrl='/api' onSignificanceChanged={this.onSignificanceChanged.bind(this)} geqSignificance={this.props.state.significance}
                        onWindowChanged={this.onWindowChanged.bind(this)}/>
         <button onClick={this.onLoad.bind(this)}>Load Window</button>
       </header>

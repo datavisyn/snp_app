@@ -16,7 +16,8 @@ import {render} from 'react-dom';
 
 import {IScatterplotOptions, IScale} from './ItemScatterplot';
 import LocusZoom, {circleSymbol, scale} from './ItemScatterplot';
-import ManhattanPlot from 'datavisyn-scatterplot-react/src/ManhattanPlot';
+import ManhattanPlot from './ManhattanPlot';
+import GeneExon, {IGene} from './GeneExon';
 import LineUp, {ILineUpConfig, ADataProvider, deriveColors, createActionDesc} from './ItemLineUp';
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
@@ -73,8 +74,8 @@ function renderSignificanceLine(ctx: CanvasRenderingContext2D, xscale: IScale, y
   ctx.stroke();
 }
 
-function toState(raw: any[]) {
-  const data = raw.map((r) => new Item(r));
+function toState(genes: IGene[], snp: any[]) {
+  const data = snp.map((r) => new Item(r));
   const chromStartExtent = extent(data, (d) => d.chromStart);
   const pvalMin = Math.min(50, 3 + max(data, (d) => d.mlogpval)); // rounding error
   const desc = [
@@ -100,30 +101,23 @@ function toState(raw: any[]) {
     extras: renderSignificanceLine
   };
 
-  return {data, options, desc};
+  return {data, options, desc, genes};
 }
 
 @observer
-class ObservedRootElement extends React.Component<{state: AppState},{data: Item[], desc: any[], options: IScatterplotOptions<Item>}> {
+class ObservedRootElement extends React.Component<{state: AppState},{data: Item[], genes: IGene[], desc: any[], options: IScatterplotOptions<Item>}> {
   render() {
     return <section>
-      <header>
-        <ManhattanPlot serverUrl='/api' onSignificanceChanged={this.onSignificanceChanged.bind(this)}
-                       geqSignificance={this.props.state.significance}
-                       onWindowChanged={this.onWindowChanged.bind(this)}/>
-        <button onClick={this.onLoad.bind(this)}>Load Window</button>
-      </header>
       <section>
-        <section>
-          {this.state && this.state.data &&
-          <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
+        <ManhattanPlot state={this.props.state}/>
+        { this.state && this.state.data && <LocusZoom data={this.state.data} state={this.props.state} options={this.props.options}
                      chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
-        </section>
-        <section>
+        { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
+      </section>
+      <section>
           {this.state && this.state.data &&
           <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions}
                   defineLineUp={defineLineUp}/>}
-        </section>
       </section>
     </section>;
   }
@@ -133,21 +127,16 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
     const significance = state.significance;
     if (w) {
       console.log('get data');
-      (self as any).fetch(`/api/data?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)
-        .then((r) => r.json())
-        .then((data: Item[]) => {
-          this.setState(toState(data));
-        });
+      const fetchSNP: Promise<any[]> = (self as any).fetch(`/api/data?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)
+        .then((r) => r.json());
+      const fetchGenes: Promise<any[]> = (self as any).fetch(`/api/gene?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)
+        .then((r) => r.json());
+      Promise.all([fetchGenes, fetchSNP]).then(([genes, snp]) => {
+        this.setState(toState(genes, snp));
+      });
     }
   }
 
-  private onSignificanceChanged(sig: number) {
-    this.props.state.significance = sig;
-  }
-
-  private onWindowChanged(fromChromosome: string, fromLocation: number, toChromosome: string, toLocation: number) {
-    this.props.state.window = {fromChromosome, fromLocation, toChromosome, toLocation};
-  }
 }
 
 render(

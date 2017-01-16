@@ -80,7 +80,7 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
 
   fig = plt.figure()
   ax = fig.add_subplot(111)
-  colors = ['red', 'blue']
+  colors = ['0.9', '0.6'] # http://matplotlib.org/api/colors_api.html
   x_labels = []
   x_labels_pos = []
 

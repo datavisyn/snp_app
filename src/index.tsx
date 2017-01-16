@@ -110,7 +110,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
     return <section>
       <section>
         <ManhattanPlot state={this.props.state}/>
-        { this.state && this.state.data && <LocusZoom data={this.state.data} state={this.props.state} options={this.props.options}
+        { this.state && this.state.data && <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
                      chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
         { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
       </section>

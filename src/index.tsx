@@ -56,10 +56,16 @@ const lineupOptions: ILineUpConfig = {
 };
 
 function defineLineUp(data: ADataProvider) {
-  data.deriveDefault();
+  const cols = data.getColumns();
+  const ranking = data.pushRanking();
+  ranking.push(data.create(cols[0])).setWidth(50);
+  ranking.push(data.create(cols[1])).setWidth(20);
+  ranking.push(data.create(cols[2]));
+  ranking.push(data.create(cols[3])).setWidth(20);
+  ranking.push(data.create(cols[4])).setWidth(20);
+  cols.slice(5).forEach((col) => ranking.push(data.create(col)).setWidth(90));
   // add a action column
-  const ranking = data.getLastRanking();
-  data.push(ranking, createActionDesc());
+  ranking.push(data.create(createActionDesc()));
 }
 
 function renderSignificanceLine(ctx: CanvasRenderingContext2D, xscale: IScale, yscale: IScale) {
@@ -76,12 +82,12 @@ function renderSignificanceLine(ctx: CanvasRenderingContext2D, xscale: IScale, y
 
 function toState(genes: IGene[], snp: any[]) {
   const data = snp.map((r) => new Item(r));
-  const chromStartExtent = extent(data, (d) => d.chromStart);
+  const chromStartExtent = extent(data, (d) => d.absChromStart);
   const pvalMin = Math.min(50, 3 + max(data, (d) => d.mlogpval)); // rounding error
   const desc = [
     {type: 'string', column: 'refsnpId'},
     {type: 'string', column: 'chrName'},
-    {type: 'number', column: 'chromStart', domain: chromStartExtent},
+    {type: 'number', column: 'absChromStart', domain: chromStartExtent},
     {type: 'categorical', column: 'allele1', categories: ACGT},
     {type: 'categorical', column: 'allele2', categories: ACGT},
     {type: 'number', column: 'freqA1', domain: extent(data, (d) => d.freqA1)},
@@ -93,13 +99,16 @@ function toState(genes: IGene[], snp: any[]) {
   ];
   deriveColors(desc as any);
   const options: IScatterplotOptions<Item> = {
-    x: (d: Item) => d.chromStart,
+    x: (d: Item) => d.absChromStart,
     y: (d: Item) => d.mlogpval,
     xscale: scale.scaleLinear().domain(chromStartExtent),
     yscale: scale.scaleLinear().domain([0, pvalMin]).clamp(true),
     symbol: circleSymbol(),
     extras: renderSignificanceLine
   };
+
+  //set the window that is visible
+  state.windowLocusZoom = chromStartExtent;
 
   return {data, options, desc, genes};
 }
@@ -108,16 +117,21 @@ function toState(genes: IGene[], snp: any[]) {
 class ObservedRootElement extends React.Component<{state: AppState},{data: Item[], genes: IGene[], desc: any[], options: IScatterplotOptions<Item>}> {
   render() {
     return <section>
-      <section>
+      <section style={{width: '50vw'}}>
         <ManhattanPlot state={this.props.state}/>
-        { this.state && this.state.data && <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
-                     chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
+        <button onClick={this.onLoad.bind(this)}>Load Window</button>
+        { this.state && this.state.data &&
+        <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
+                   chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
         { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
       </section>
       <section>
-          {this.state && this.state.data &&
-          <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions}
-                  defineLineUp={defineLineUp}/>}
+        <div>
+          Selection Info
+        </div>
+        {this.state && this.state.data &&
+        <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions}
+                defineLineUp={defineLineUp}/>}
       </section>
     </section>;
   }

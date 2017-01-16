@@ -9,6 +9,7 @@ export class Item {
   readonly refsnpId: string;
   readonly chrName: string;
   readonly chromStart: number;
+  readonly absChromStart: number;
   readonly allele1: string;
   readonly allele2: string;
   readonly freqA1: number;
@@ -21,6 +22,7 @@ export class Item {
     this.refsnpId = item.refsnp_id;
     this.chrName = item.chr_name;
     this.chromStart = parseInt(item.chrom_start, 10);
+    this.absChromStart = parseInt(item.abs_chrom_start, 10);
     this.allele1 = item.allele1;
     this.allele2 = item.allele2;
     this.freqA1 = parseFloat(item.freqA1);

@@ -13,7 +13,7 @@ import ADataProvider from 'lineupjs/src/provider/ADataProvider';
 
 export {deriveColors, ILineUpConfig} from 'lineupjs/src/lineup';
 export {default as ADataProvider} from 'lineupjs/src/provider/ADataProvider';
-export {createActionDesc} from 'lineupjs/src/model';
+export {createActionDesc, createRankDesc} from 'lineupjs/src/model';
 
 class ItemLineUp extends LineUp<Item> {
 

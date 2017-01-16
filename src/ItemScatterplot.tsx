@@ -7,6 +7,7 @@ import LocusZoom, {IScatterplotOptions} from 'datavisyn-scatterplot-react/src/Lo
 import {observer} from 'mobx-react';
 import AppState, {Item} from './state';
 import {ISymbol, ERenderMode} from 'datavisyn-scatterplot/src/symbol';
+import Scatterplot, {IWindow} from 'datavisyn-scatterplot/src';
 
 
 export {IScatterplotOptions, scale} from 'datavisyn-scatterplot-react/src';
@@ -66,10 +67,15 @@ export default class ObservedLocusZoom extends React.Component<{data: Item[], op
     const {selection} = this.props.state;
     const {chromosome, data, options} = this.props;
     return <ItemLocusZoom data={data} options={options} selection={selection.slice()}
-                          onSelectionChanged={this.onSelectionChanged.bind(this)} chromosome={chromosome}/>;
+                          onSelectionChanged={this.onSelectionChanged.bind(this)}
+                          onWindowChanged={this.onWindowChanged.bind(this)} chromosome={chromosome}/>;
   }
 
   private onSelectionChanged(selection: Item[]) {
     this.props.state.selection = selection;
+  }
+
+  private onWindowChanged(window: IWindow) {
+    this.props.state.windowLocusZoom = window.xMinMax;
   }
 }

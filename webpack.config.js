@@ -99,17 +99,17 @@ const actBuildInfoFile = `file-loader?name=buildInfo.json!${buildInfo.tmpFile()}
  * @returns {*}
  */
 function injectRegistry(entry) {
-  //build also the registry
-  if (typeof entry === 'string') {
-    return [registryFile, actBuildInfoFile].concat(entry);
-  } else {
-    const transformed = {};
-    Object.keys(entry).forEach((eentry) => {
-      transformed[eentry] = [registryFile, actBuildInfoFile].concat(entry[eentry]);
-    });
-    return transformed;
-  }
-
+  return entry;
+  // //build also the registry
+  // if (typeof entry === 'string') {
+  //   return [registryFile, actBuildInfoFile].concat(entry);
+  // } else {
+  //   const transformed = {};
+  //   Object.keys(entry).forEach((eentry) => {
+  //     transformed[eentry] = [registryFile, actBuildInfoFile].concat(entry[eentry]);
+  //   });
+  //   return transformed;
+  // }
 }
 /**
  * generate a webpack configuration

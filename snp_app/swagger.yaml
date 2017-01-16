@@ -133,6 +133,29 @@ paths:
           description: "Successful response"
           schema:
             type: "number"
+  /gene/exon:
+    get:
+      tags:
+      - "default"
+      description: "get exon data for a set of genes\n"
+      operationId: "snp_app.default_controller.gene_exon_get"
+      parameters:
+        - name: "gene_name"
+          in: "query"
+          description: "the requested gene names"
+          required: true
+          type: "array"
+          items:
+            type: "string"
+          collectionFormat: "csv"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            title: "ArrayOfGenes"
+            items:
+              $ref: "#/definitions/Gene"
   /manhattan:
     get:
       tags:

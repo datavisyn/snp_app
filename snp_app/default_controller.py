@@ -224,30 +224,47 @@ def exon_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to
   return count
 
 
-def gene_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, with_exons=False):
+def _gene_exon_get(query, params):
   from json import dumps
+  data = pd.read_sql(query, params=params, con=get_db())
+  grouped = data.groupby('gene_name')
+  gene_list = []
+  for name, group in grouped:
+    exons = group.loc[:, ['start', 'end', 'abs_start', 'abs_end']]
+    # build base data
+    gene = dict(gene_name=name, strand=group.strand.min(), start=group.start.min(), abs_start=group.abs_start.min(),
+                end=group.end.max(), abs_end=group.abs_end.max(), exons='EXONS')
+    gene_string = dumps(gene)
+    # use fast pandas to string for the detail data
+    gene_string = gene_string.replace('"EXONS"', exons.to_json(orient='records'))
+    gene_list.append(gene_string)
+  return '[' + ','.join(gene_list) + ']'
+
+
+def gene_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, with_exons=False):
   query_from_where, params = _to_exon_query(from_chromosome, from_location, to_chromosome, to_location)
 
   if with_exons:
     query = 'select s.*, (s.start + c.shift) as abs_start, (s.end + c.shift) as abs_end ' + query_from_where + ' order by abs_start'
-    data = pd.read_sql(query, params=params, con=get_db())
-    grouped = data.groupby('gene_name')
-    gene_list = []
-    for name, group in grouped:
-      exons = group.loc[:, ['start', 'end', 'abs_start', 'abs_end']]
-      # build base data
-      gene = dict(gene_name=name, strand=group.strand.min(), start=group.start.min(), abs_start=group.abs_start.min(),
-                  end=group.end.max(), abs_end=group.abs_end.max(), exons='EXONS')
-      gene_string = dumps(gene)
-      # use fast pandas to string for the detail data
-      gene_string = gene_string.replace('"EXONS"', exons.to_json(orient='records'))
-      gene_list.append(gene_string)
-    r = '[' + ','.join(gene_list) + ']'
+    r = _gene_exon_get(query, params)
   else:
-    query = 'select s.gene_name, s.strand, min(s.start) as start, max(s.end) as end, min(s.start + c.shift) as abs_start, max(s.end + c.shift) as abs_end ' + query_from_where + ' group by s.gene_name order by s.gene_name, s.strand'
+    query = """select s.gene_name, s.strand, min(s.start) as start, max(s.end) as end, min(s.start + c.shift) as abs_start, max(s.end + c.shift) as abs_end
+    {from_where}
+    group by s.gene_name order by s.gene_name, s.strand""" \
+      .format(from_where=query_from_where)
     data = pd.read_sql(query, params=params, con=get_db())
 
     r = data.to_json(orient='records')
+  return flask.Response(r, mimetype='application/json')
+
+
+def gene_exon_get(gene_name):
+  query = """
+    select s.*, (s.start + c.shift) as abs_start, (s.end + c.shift) as abs_end
+    from exon s left join chromosome c on s.chr_name = c.chr_name
+    where s.gene_name in ("{names}") order by abs_start
+  """.format(names='","'.join(gene_name))
+  r = _gene_exon_get(query, ())
   return flask.Response(r, mimetype='application/json')
 
 

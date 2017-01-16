@@ -100,29 +100,29 @@ parameters:
   from_chromosome:
     name: "from_chromosome"
     in: "query"
-    description: "chromosome start"
-    required: true
+    description: "start chromosome, if neither from_chromosome nor to_chromosome is given all data is returned"
+    required: false
     type: "string"
   from_location:
     name: "from_location"
     in: "query"
     description: "within chromosome start location"
-    required: true
+    required: false
     type: "number"
-    format: "integer"
+    format: "int32"
   to_chromosome:
     name: "to_chromosome"
     in: "query"
-    description: "chromosome start"
-    required: true
+    description: "end chromosome, default value the same as from_chromosome"
+    required: false
     type: "string"
   to_location:
     name: "to_location"
     in: "query"
-    description: "within chromosome end location"
-    required: true
+    description: "within chromosome end location, default value the end of the chromosome"
+    required: false
     type: "number"
-    format: "integer"
+    format: "int32"
   geq_significance:
     name: "geq_significance"
     in: "query"
@@ -148,7 +148,7 @@ definitions:
         type: "string"
       chrom_start:
         type: "number"
-        format: "integer"
+        format: "int32"
       allele1:
         type: "string"
       allele2:
@@ -167,22 +167,22 @@ definitions:
         format: "double"
       N:
         type: "number"
-        format: "integer"
+        format: "int32"
   Chromosome:
     properties:
       chr_name:
         type: "string"
       start:
         type: "number"
-        format: "integer"
+        format: "int32"
       end:
         type: "number"
-        format: "integer"
+        format: "int32"
       derived:
         type: "boolean"
       length:
         type: "number"
-        format: "integer"
+        format: "int32"
       shift:
         type: "number"
-        format: "integer"
+        format: "int32"

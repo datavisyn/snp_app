@@ -221,3 +221,21 @@ def exon_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to
   count = get_db().execute(query, params).fetchone()[0]
 
   return count
+
+def gene_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint):
+  query_from_where, params = _to_exon_query(from_chromosome, from_location, to_chromosome, to_location)
+
+  query = 'select s.gene_name, s.strand, min(s.start) as start, max(s.end) as end, min(s.start + c.shift) as abs_start, max(s.end + c.shift) as abs_end ' + query_from_where + ' group by s.gene_name order by s.gene_name, s.strand'
+  data = pd.read_sql(query, params=params, con=get_db())
+
+  r = data.to_json(orient='records')
+  return flask.Response(r, mimetype='application/json')
+
+
+def gene_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint):
+  query_from_where, params = _to_exon_query(from_chromosome, from_location, to_chromosome, to_location)
+
+  query = 'select count(*) from (select s.gene_name, s.strand ' + query_from_where + ' group by s.gene_name, s.strand)'
+  count = get_db().execute(query, params).fetchone()[0]
+
+  return count

@@ -10,6 +10,11 @@ import AppState, {Item} from './state';
 import {ILineUpConfig} from 'lineupjs/src/lineup';
 import ADataProvider from 'lineupjs/src/provider/ADataProvider';
 
+
+export {deriveColors, ILineUpConfig} from 'lineupjs/src/lineup';
+export {default as ADataProvider} from 'lineupjs/src/provider/ADataProvider';
+export {createActionDesc} from 'lineupjs/src/model';
+
 class ItemLineUp extends LineUp<Item> {
 
 }

@@ -14,16 +14,13 @@ import * as React from 'react';
 /* tslint:enable */
 import {render} from 'react-dom';
 
-import LocusZoom, {circleSymbol} from './ItemScatterplot';
-import {IScatterplotOptions, scale} from 'datavisyn-scatterplot-react/src';
+import {IScatterplotOptions, IScale} from './ItemScatterplot';
+import LocusZoom, {circleSymbol, scale} from './ItemScatterplot';
 import ManhattanPlot from 'datavisyn-scatterplot-react/src/ManhattanPlot';
-import LineUp from './ItemLineUp';
-import {deriveColors, ILineUpConfig} from 'lineupjs/src/lineup';
+import LineUp, {ILineUpConfig, ADataProvider, deriveColors, createActionDesc} from './ItemLineUp';
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
 import {observer} from 'mobx-react';
-import ADataProvider from 'lineupjs/src/provider/ADataProvider';
-import {createActionDesc} from 'lineupjs/src/model';
 
 const state = new AppState();
 
@@ -64,6 +61,18 @@ function defineLineUp(data: ADataProvider) {
   data.push(ranking, createActionDesc());
 }
 
+function renderSignificanceLine(ctx: CanvasRenderingContext2D, xscale: IScale, yscale: IScale) {
+  const signifiance = state.significance;
+  const y = yscale(signifiance) + 1; // don't know the offset
+  const x0x1 = xscale.domain().map(xscale);
+  ctx.beginPath();
+  ctx.moveTo(x0x1[0], y);
+  ctx.lineTo(x0x1[1], y);
+  ctx.setLineDash([5, 5]);
+  ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+  ctx.stroke();
+}
+
 function toState(raw: any[]) {
   const data = raw.map((r) => new Item(r));
   const chromStartExtent = extent(data, (d) => d.chromStart);
@@ -87,7 +96,8 @@ function toState(raw: any[]) {
     y: (d: Item) => d.mlogpval,
     xscale: scale.scaleLinear().domain(chromStartExtent),
     yscale: scale.scaleLinear().domain([0, pvalMin]).clamp(true),
-    symbol: circleSymbol()
+    symbol: circleSymbol(),
+    extras: renderSignificanceLine
   };
 
   return {data, options, desc};
@@ -98,7 +108,8 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
   render() {
     return <section>
       <header>
-        <ManhattanPlot serverUrl='/api' onSignificanceChanged={this.onSignificanceChanged.bind(this)} geqSignificance={this.props.state.significance}
+        <ManhattanPlot serverUrl='/api' onSignificanceChanged={this.onSignificanceChanged.bind(this)}
+                       geqSignificance={this.props.state.significance}
                        onWindowChanged={this.onWindowChanged.bind(this)}/>
         <button onClick={this.onLoad.bind(this)}>Load Window</button>
       </header>
@@ -110,7 +121,8 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
         </section>
         <section>
           {this.state && this.state.data &&
-          <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions} defineLineUp={defineLineUp}/>}
+          <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions}
+                  defineLineUp={defineLineUp}/>}
         </section>
       </section>
     </section>;

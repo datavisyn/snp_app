@@ -8,6 +8,10 @@ import {observer} from 'mobx-react';
 import AppState, {Item} from './state';
 import {ISymbol, ERenderMode} from 'datavisyn-scatterplot/src/symbol';
 
+
+export {IScatterplotOptions, scale} from 'datavisyn-scatterplot-react/src';
+export {IScale} from 'datavisyn-scatterplot/src';
+
 class ItemLocusZoom extends LocusZoom<Item> {
 
 }

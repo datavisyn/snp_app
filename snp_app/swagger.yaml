@@ -54,6 +54,13 @@ paths:
         required: false
         type: "number"
         format: "double"
+      - name: "leq_significance"
+        in: "query"
+        description: "filter the resulting containing just SNP having a significance\
+          \ <= the argument"
+        required: false
+        type: "number"
+        format: "double"
       responses:
         200:
           description: "Successful response"
@@ -66,7 +73,7 @@ paths:
     get:
       tags:
       - "default"
-      description: "Gets manhatta plot data\n"
+      description: "Gets manhattan plot data\n"
       operationId: "snp_app.default_controller.manhattan_get"
       parameters:
       - name: "geq_significance"

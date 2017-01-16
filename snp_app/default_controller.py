@@ -134,12 +134,12 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
   return result
 
 
-def data_get(from_chromosome, from_location, to_chromosome, to_location, geq_significance=None):
+def data_get(from_chromosome, from_location, to_chromosome, to_location, geq_significance=None, leq_significance=None):
   abs_from = _to_abs_position(from_chromosome, from_location)
   abs_to = _to_abs_position(to_chromosome, to_location)
 
-  query = 'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where abs_location between ? and ? and pval <= ? order by abs_location'
-  params = (abs_from, abs_to, 1 if geq_significance is None else sig2pval(geq_significance),)
+  query = 'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where abs_location between ? and ? and pval between ? and ? order by abs_location'
+  params = (abs_from, abs_to, 0 if leq_significance is None else sig2pval(leq_significance), 1 if geq_significance is None else sig2pval(geq_significance),)
   data = pd.read_sql(query, params=params, con=get_db())
 
   r = data.to_json(orient='records')

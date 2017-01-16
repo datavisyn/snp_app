@@ -25,42 +25,12 @@ paths:
       description: "get snp data for locus zoom and lineup\n"
       operationId: "snp_app.default_controller.data_get"
       parameters:
-      - name: "from_chromosome"
-        in: "query"
-        description: "chromosome start"
-        required: true
-        type: "string"
-      - name: "from_location"
-        in: "query"
-        description: "within chromosome start location"
-        required: true
-        type: "number"
-        format: "integer"
-      - name: "to_chromosome"
-        in: "query"
-        description: "chromosome start"
-        required: true
-        type: "string"
-      - name: "to_location"
-        in: "query"
-        description: "within chromosome end location"
-        required: true
-        type: "number"
-        format: "integer"
-      - name: "geq_significance"
-        in: "query"
-        description: "filter the resulting containing just SNP having a significance\
-          \ >= the argument"
-        required: false
-        type: "number"
-        format: "double"
-      - name: "leq_significance"
-        in: "query"
-        description: "filter the resulting containing just SNP having a significance\
-          \ <= the argument"
-        required: false
-        type: "number"
-        format: "double"
+        - $ref: '#/parameters/geq_significance'
+        - $ref: '#/parameters/leq_significance'
+        - $ref: '#/parameters/from_chromosome'
+        - $ref: '#/parameters/from_location'
+        - $ref: '#/parameters/to_chromosome'
+        - $ref: '#/parameters/to_location'
       responses:
         200:
           description: "Successful response"
@@ -76,13 +46,7 @@ paths:
       description: "Gets manhattan plot data\n"
       operationId: "snp_app.default_controller.manhattan_get"
       parameters:
-      - name: "geq_significance"
-        in: "query"
-        description: "filter the resulting containing just SNP having a significance\
-          \ >= the argument"
-        required: false
-        type: "number"
-        format: "double"
+      - $ref: '#/parameters/geq_significance'
       - name: "plain"
         in: "query"
         description: "plain results no axes"
@@ -110,16 +74,53 @@ paths:
       description: "Gets manhatta plot meta data\n"
       operationId: "snp_app.default_controller.manhattan_meta_get"
       parameters:
-      - name: "geq_significance"
-        in: "query"
-        description: "filter the resulting containing just SNP having a significance\
-          \ >= the argument"
-        required: false
-        type: "number"
-        format: "double"
+      - $ref: '#/parameters/geq_significance'
       responses:
         200:
           description: "Successful response"
+parameters:
+  from_chromosome:
+    name: "from_chromosome"
+    in: "query"
+    description: "chromosome start"
+    required: true
+    type: "string"
+  from_location:
+    name: "from_location"
+    in: "query"
+    description: "within chromosome start location"
+    required: true
+    type: "number"
+    format: "integer"
+  to_chromosome:
+    name: "to_chromosome"
+    in: "query"
+    description: "chromosome start"
+    required: true
+    type: "string"
+  to_location:
+    name: "to_location"
+    in: "query"
+    description: "within chromosome end location"
+    required: true
+    type: "number"
+    format: "integer"
+  geq_significance:
+    name: "geq_significance"
+    in: "query"
+    description: "filter the resulting containing just SNP having a significance\
+      \ >= the argument"
+    required: false
+    type: "number"
+    format: "double"
+  leq_significance:
+    name: "leq_significance"
+    in: "query"
+    description: "filter the resulting containing just SNP having a significance\
+      \ <= the argument"
+    required: false
+    type: "number"
+    format: "double"
 definitions:
   SNP:
     properties:

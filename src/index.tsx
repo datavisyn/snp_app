@@ -129,7 +129,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
       console.log('get data');
       const fetchSNP: Promise<any[]> = (self as any).fetch(`/api/data?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)
         .then((r) => r.json());
-      const fetchGenes: Promise<any[]> = (self as any).fetch(`/api/gene?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)
+      const fetchGenes: Promise<any[]> = (self as any).fetch(`/api/gene?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}`)
         .then((r) => r.json());
       Promise.all([fetchGenes, fetchSNP]).then(([genes, snp]) => {
         this.setState(toState(genes, snp));

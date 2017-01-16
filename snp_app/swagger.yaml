@@ -103,6 +103,12 @@ paths:
         - $ref: '#/parameters/from_location'
         - $ref: '#/parameters/to_chromosome'
         - $ref: '#/parameters/to_location'
+        - name: "with_exons"
+          in: "query"
+          description: "include exon data in the result"
+          required: false
+          default: false
+          type: "boolean"
       responses:
         200:
           description: "Successful response"
@@ -268,6 +274,23 @@ definitions:
       end:
         type: "number"
         format: "int32"
+      exons:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            start:
+              type: "number"
+              format: "int32"
+            end:
+              type: "number"
+              format: "int32"
+            abs_start:
+              type: "number"
+              format: "int32"
+            abs_end:
+              type: "number"
+              format: "int32"
   Exon:
     properties:
       gene_name:
@@ -280,5 +303,11 @@ definitions:
         type: "number"
         format: "int32"
       end:
+        type: "number"
+        format: "int32"
+      abs_start:
+        type: "number"
+        format: "int32"
+      abs_end:
         type: "number"
         format: "int32"

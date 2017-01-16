@@ -90,8 +90,8 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
 
   for num, chromosome in enumerate(chromosomes):
     group = pd.read_sql(
-        'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
-        params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name), con=get_db())
+      'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
+      params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name), con=get_db())
 
     # -log_10(pvalue)
     group['minuslog10pvalue'] = -np.log10(group.pval)
@@ -137,7 +137,7 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
 
 
 def _to_snp_query(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
-              leq_significance=None):
+                  leq_significance=None):
   params = []
   q = 'from snp s left join chromosome c on s.chr_name = c.chr_name '
   append = 'where'
@@ -165,7 +165,7 @@ def _to_snp_query(from_chromosome=None, from_location=0, to_chromosome=None, to_
 def data_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
              leq_significance=None):
   query_from_where, params = _to_snp_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
-                                       leq_significance)
+                                           leq_significance)
 
   query = 'select s.*, (s.chrom_start + c.shift) as abs_location ' + query_from_where + ' order by abs_location'
   data = pd.read_sql(query, params=params, con=get_db())
@@ -177,7 +177,7 @@ def data_get(from_chromosome=None, from_location=0, to_chromosome=None, to_locat
 def data_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, geq_significance=None,
                    leq_significance=None):
   query_from_where, params = _to_snp_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
-                                       leq_significance)
+                                           leq_significance)
 
   query = 'select count(*) ' + query_from_where
   count = get_db().execute(query, params).fetchone()[0]
@@ -185,7 +185,7 @@ def data_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to
   return count
 
 
-def _to_exon_query(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint,):
+def _to_exon_query(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, ):
   params = []
   q = 'from exon s left join chromosome c on s.chr_name = c.chr_name '
   append = 'where'
@@ -222,13 +222,31 @@ def exon_count_get(from_chromosome=None, from_location=0, to_chromosome=None, to
 
   return count
 
-def gene_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint):
+
+def gene_get(from_chromosome=None, from_location=0, to_chromosome=None, to_location=maxint, with_exons=False):
+  from json import dumps
   query_from_where, params = _to_exon_query(from_chromosome, from_location, to_chromosome, to_location)
 
-  query = 'select s.gene_name, s.strand, min(s.start) as start, max(s.end) as end, min(s.start + c.shift) as abs_start, max(s.end + c.shift) as abs_end ' + query_from_where + ' group by s.gene_name order by s.gene_name, s.strand'
-  data = pd.read_sql(query, params=params, con=get_db())
+  if with_exons:
+    query = 'select s.*, (s.start + c.shift) as abs_start, (s.end + c.shift) as abs_end ' + query_from_where + ' order by abs_start'
+    data = pd.read_sql(query, params=params, con=get_db())
+    grouped = data.groupby('gene_name')
+    gene_list = []
+    for name, group in grouped:
+      exons = group.loc[:, ['start', 'end', 'abs_start', 'abs_end']]
+      # build base data
+      gene = dict(gene_name=name, strand=group.strand.min(), start=group.start.min(), abs_start=group.abs_start.min(),
+                  end=group.end.max(), abs_end=group.abs_end.max(), exons='EXONS')
+      gene_string = dumps(gene)
+      # use fast pandas to string for the detail data
+      gene_string = gene_string.replace('"EXONS"',exons.to_json(orient='records'))
+      gene_list.append(gene_string)
+    r = '[' + ','.join(gene_list) + ']'
+  else:
+    query = 'select s.gene_name, s.strand, min(s.start) as start, max(s.end) as end, min(s.start + c.shift) as abs_start, max(s.end + c.shift) as abs_end ' + query_from_where + ' group by s.gene_name order by s.gene_name, s.strand'
+    data = pd.read_sql(query, params=params, con=get_db())
 
-  r = data.to_json(orient='records')
+    r = data.to_json(orient='records')
   return flask.Response(r, mimetype='application/json')
 
 

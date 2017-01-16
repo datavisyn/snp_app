@@ -248,6 +248,9 @@ definitions:
       chrom_start:
         type: "number"
         format: "int32"
+      abs_chrom_start:
+        type: "number"
+        format: "int32"
       allele1:
         type: "string"
       allele2:

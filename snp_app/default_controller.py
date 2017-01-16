@@ -168,7 +168,7 @@ def data_get(from_chromosome=None, from_location=0, to_chromosome=None, to_locat
   query_from_where, params = _to_snp_query(from_chromosome, from_location, to_chromosome, to_location, geq_significance,
                                            leq_significance)
 
-  query = 'select s.*, (s.chrom_start + c.shift) as abs_location ' + query_from_where + ' order by abs_location'
+  query = 'select s.*, (s.chrom_start + c.shift) as abs_chrom_start ' + query_from_where + ' order by abs_chrom_start'
   data = pd.read_sql(query, params=params, con=get_db())
 
   r = data.to_json(orient='records')

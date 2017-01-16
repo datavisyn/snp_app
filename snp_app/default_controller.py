@@ -89,9 +89,10 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
   maxes = []
 
   for num, chromosome in enumerate(chromosomes):
-    group = pd.read_sql(
-      'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location',
-      params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name), con=get_db())
+    query = 'select s.*, (s.chrom_start + c.shift) as abs_location from snp s left join chromosome c on s.chr_name = c.chr_name where pval <= ? and s.chr_name = ? order by abs_location'
+    group = pd.read_sql(query,
+                        params=(sig2pval(geq_significance) if geq_significance is not None else 1, chromosome.chr_name),
+                        con=get_db())
 
     # -log_10(pvalue)
     group['minuslog10pvalue'] = -np.log10(group.pval)
@@ -239,7 +240,7 @@ def gene_get(from_chromosome=None, from_location=0, to_chromosome=None, to_locat
                   end=group.end.max(), abs_end=group.abs_end.max(), exons='EXONS')
       gene_string = dumps(gene)
       # use fast pandas to string for the detail data
-      gene_string = gene_string.replace('"EXONS"',exons.to_json(orient='records'))
+      gene_string = gene_string.replace('"EXONS"', exons.to_json(orient='records'))
       gene_list.append(gene_string)
     r = '[' + ','.join(gene_list) + ']'
   else:

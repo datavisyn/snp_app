@@ -18,10 +18,12 @@ import LocusZoom from './ItemScatterplot';
 import {IScatterplotOptions, scale} from 'datavisyn-scatterplot-react/src';
 import ManhattanPlot from 'datavisyn-scatterplot-react/src/ManhattanPlot';
 import LineUp from './ItemLineUp';
-import {deriveColors} from 'lineupjs/src/lineup';
+import {deriveColors, ILineUpConfig} from 'lineupjs/src/lineup';
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
 import {observer} from 'mobx-react';
+import ADataProvider from 'lineupjs/src/provider/ADataProvider';
+import {createActionDesc} from 'lineupjs/src/model';
 
 const state = new AppState();
 
@@ -31,6 +33,36 @@ const ACGT = [
   {label: 'a', color: 'blue'},
   {label: 'g', color: 'yellow'}];
 
+const lineupOptions: ILineUpConfig = {
+  body: {
+    actions: [{
+      name: 'Comment',
+      icon: '\uf0e5', //'fa-comment-o',
+      action: (row: Item) => {
+        console.log('comment button pressed for Item', row);
+      }
+    }, {
+      name: 'Bookmark',
+      icon: '\uf097', //'fa-bookmark-o',
+      action: (row: Item) => {
+        console.log('bookmark for Item', row);
+      }
+    }, {
+      name: 'Open Details',
+      icon: '\uf002', //'fa-search',
+      action: (row: Item) => {
+        console.log('open details for Item', row);
+      }
+    }]
+  }
+};
+
+function defineLineUp(data: ADataProvider) {
+  data.deriveDefault();
+  // add a action column
+  const ranking = data.getLastRanking();
+  data.push(ranking, createActionDesc());
+}
 
 function toState(raw: any[]) {
   const data = raw.map((r) => new Item(r));
@@ -77,7 +109,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
         </section>
         <section>
           {this.state && this.state.data &&
-          <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state}/>}
+          <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions} defineLineUp={defineLineUp}/>}
         </section>
       </section>
     </section>;

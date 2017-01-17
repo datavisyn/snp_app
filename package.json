@@ -88,7 +88,7 @@
     "@types/react-dom": "^0.14.20",
     "@types/d3-array": "^1.0.5",
     "d3-array": "^1.0.1",
-    "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
+    "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#geneexon",
     "font-awesome": "^4.6.3",
     "lineupjs": "github:Caleydo/lineupjs#master",
     "mobx": "^2.6.0",

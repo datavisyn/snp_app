@@ -54,4 +54,6 @@ export default class AppState {
   @observable window: IWindow = null;
 
   @observable windowLocusZoom: number[] = null;
+
+  @observable showDialog: boolean = false;
 }

@@ -22,6 +22,14 @@ import LineUp, {ILineUpConfig, ADataProvider, deriveColors, createActionDesc} fr
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
 import {observer} from 'mobx-react';
+import Dialog from './Dialog';
+
+import * as injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap in Material UI
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
 
 const state = new AppState();
 
@@ -116,24 +124,30 @@ function toState(genes: IGene[], snp: any[]) {
 @observer
 class ObservedRootElement extends React.Component<{state: AppState},{data: Item[], genes: IGene[], desc: any[], options: IScatterplotOptions<Item>}> {
   render() {
-    return <section>
-      <section style={{width: '50vw'}}>
-        <ManhattanPlot state={this.props.state}/>
-        <button onClick={this.onLoad.bind(this)}>Load Window</button>
-        { this.state && this.state.data &&
-        <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
-                   chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
-        { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
-      </section>
+    return <div>
+      <nav>
+        <button onClick={this.toggleDialog.bind(this)}>Show Dialog</button>
+      </nav>
+      { this.props.state && this.props.state.showDialog? <Dialog showDialog={this.props.state.showDialog} toggleDialog={this.toggleDialog.bind(this)} state={this.props.state} /> : null }
       <section>
-        <div>
-          Selection Info
-        </div>
-        {this.state && this.state.data &&
-        <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions}
-                defineLineUp={defineLineUp}/>}
+        <section style={{width: '50vw'}}>
+          <ManhattanPlot state={this.props.state}/>
+          <button onClick={this.onLoad.bind(this)}>Load Window</button>
+          { this.state && this.state.data &&
+          <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
+                     chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
+          { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
+        </section>
+        <section>
+          <div>
+            Selection Info
+          </div>
+          {this.state && this.state.data &&
+          <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state} options={lineupOptions}
+                  defineLineUp={defineLineUp}/>}
+        </section>
       </section>
-    </section>;
+    </div>;
   }
 
   private onLoad() {
@@ -149,6 +163,10 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
         this.setState(toState(genes, snp));
       });
     }
+  }
+
+  toggleDialog() {
+    this.props.state.showDialog = !this.props.state.showDialog;
   }
 
 }

@@ -128,7 +128,9 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
       <nav>
         <button onClick={this.toggleDialog.bind(this)}>Show Dialog</button>
       </nav>
-      { this.props.state && this.props.state.showDialog? <Dialog showDialog={this.props.state.showDialog} toggleDialog={this.toggleDialog.bind(this)} state={this.props.state} /> : null }
+      { this.props.state && this.props.state.showDialog?
+        <Dialog showDialog={this.props.state.showDialog} toggleDialog={this.toggleDialog.bind(this)} state={this.props.state} /> : null
+      }
       <section>
         <section style={{width: '50vw'}}>
           <ManhattanPlot state={this.props.state}/>

@@ -29,7 +29,13 @@ export default class Anatomogram extends React.Component<{}, {svgLoaded: boolean
       tissue.style.fill = null;
       tissue.style.stroke = null;
 
-      tissue.classList.add('datavisyn-default');
+      if(Math.round(Math.random()) === 0) {
+        tissue.classList.add('datavisyn-default');
+      }
+      else {
+        tissue.classList.add('datavisyn-selected');
+      }
+
 
       tissue.addEventListener('mouseover', () => {
         console.log("TEST");

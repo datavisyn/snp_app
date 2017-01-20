@@ -44,11 +44,11 @@ section {
     stroke: none;
   }
 
-  .hover {
+  .datavisyn-hover {
     fill: orange;
   }
 
-  .selected {
-    fill: steelblue;
+  .datavisyn-selected {
+    fill: rgba(0, 0, 150, 0.5);
   }
 }

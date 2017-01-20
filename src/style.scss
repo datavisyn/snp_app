@@ -37,3 +37,18 @@ section {
 .selected {
   background-color: red;
 }
+
+.datavisyn-anatomogram {
+  .datavisyn-default {
+    fill: rgba(0, 0, 0, 0.5);
+    stroke: none;
+  }
+
+  .hover {
+    fill: orange;
+  }
+
+  .selected {
+    fill: steelblue;
+  }
+}

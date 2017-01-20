@@ -4,6 +4,8 @@ import UIDialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+import Anatomogram from './Anatomogram';
+
 
 export default class Dialog extends React.Component<{showDialog: boolean, toggleDialog: () => void, state: AppState}, undefined> {
 
@@ -23,7 +25,7 @@ export default class Dialog extends React.Component<{showDialog: boolean, toggle
     return (
       <MuiThemeProvider>
         <UIDialog title="Anatomogram" open={this.props.showDialog} actions={actions}>
-          Placeholder for an anatomogram
+          <Anatomogram/>
         </UIDialog>
       </MuiThemeProvider>
     );

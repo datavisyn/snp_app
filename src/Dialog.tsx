@@ -22,9 +22,14 @@ export default class Dialog extends React.Component<{showDialog: boolean, toggle
       />
     ];
 
+    const customStyle = {
+      width: "500px",
+      height: "600px"
+    }
+
     return (
       <MuiThemeProvider>
-        <UIDialog title="Anatomogram" open={this.props.showDialog} actions={actions}>
+        <UIDialog title="Anatomogram" open={this.props.showDialog} actions={actions} contentStyle={customStyle}>
           <Anatomogram/>
         </UIDialog>
       </MuiThemeProvider>

@@ -14,6 +14,11 @@ section {
     overflow-y: auto;
   }
 
+  .datavisyn-manhattanplot-detail-window {
+    fill: black;
+    opacity: 0.2;
+  }
+
   div.datavisyn-scatterplot {
     height: 20vh;
   }
@@ -37,3 +42,4 @@ section {
 .selected {
   background-color: red;
 }
+

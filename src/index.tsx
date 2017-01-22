@@ -83,7 +83,7 @@ function renderSignificanceLine(ctx: CanvasRenderingContext2D, xscale: IScale, y
 function toState(genes: IGene[], snp: any[]) {
   const data = snp.map((r) => new Item(r));
   const chromStartExtent = extent(data, (d) => d.absChromStart);
-  const pvalMin = Math.min(50, 3 + max(data, (d) => d.mlogpval)); // rounding error
+  const pvalMin = Math.min(60, 5 + max(data, (d) => d.mlogpval)); // rounding error
   const desc = [
     {type: 'string', column: 'refsnpId'},
     {type: 'string', column: 'chrName'},

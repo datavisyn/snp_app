@@ -22,6 +22,7 @@ import LineUp, {ILineUpConfig, ADataProvider, deriveColors, createActionDesc} fr
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
 import {observer} from 'mobx-react';
+import DetailBand from 'snp_app/src/DetailBand';
 
 const state = new AppState();
 
@@ -120,6 +121,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
       <section style={{width: '50vw'}}>
         <ManhattanPlot state={this.props.state}/>
         <button onClick={this.onLoad.bind(this)}>Load Window</button>
+        { this.state && this.state.data && <DetailBand state={this.props.state}/>}
         { this.state && this.state.data &&
         <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
                    chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}

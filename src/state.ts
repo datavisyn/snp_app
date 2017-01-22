@@ -3,7 +3,7 @@
  */
 
 import {observable} from 'mobx';
-import {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
+import {IWindow, IChromosome} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
 
 export class Item {
   readonly refsnpId: string;
@@ -54,4 +54,5 @@ export default class AppState {
   @observable window: IWindow = null;
 
   @observable windowLocusZoom: number[] = null;
+  @observable windowManhattan: number[] = null;
 }

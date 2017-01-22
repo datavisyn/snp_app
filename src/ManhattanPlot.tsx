@@ -11,7 +11,14 @@ import ManhattanPlot, {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanP
 export default class ObservedManhattanPlot extends React.Component<{state: AppState},{}> {
   render() {
     return <ManhattanPlot serverUrl="/api" onSignificanceChanged={this.onSignificanceChanged.bind(this)}
-                       geqSignificance={this.props.state.significance} onWindowChanged={this.onWindowChanged.bind(this)} snapToChromosome={true} detailWindow={this.props.state.windowLocusZoom}/>;
+                          geqSignificance={this.props.state.significance}
+                          onWindowChanged={this.onWindowChanged.bind(this)} snapToChromosome={true}
+                          detailWindow={this.props.state.windowLocusZoom}
+                          onMetadataLoaded={this.onMetaDataLoaded.bind(this)}/>;
+  }
+
+  private onMetaDataLoaded(xlim: number[]) {
+    this.props.state.windowManhattan = xlim;
   }
 
   private onSignificanceChanged(sig: number) {

@@ -38,6 +38,13 @@ section {
   }
 }
 
+svg.detailBand {
+  path {
+    fill: black;
+    opacity: 0.2;
+  }
+}
+
 
 .selected {
   background-color: red;

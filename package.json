@@ -1,4 +1,21 @@
 {
+  "name": "snp_app",
+  "description": "",
+  "homepage": "https://phovea.caleydo.org",
+  "version": "1.0.0-SNAPSHOT",
+  "author": {
+    "name": "Samuel Gratzl",
+    "email": "samuel_gratzl@gmx.at",
+    "url": ""
+  },
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/datavisyn/snp_app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datavisyn/snp_app.git"
+  },
   "private": true,
   "scripts": {
     "predist": "echo hybrid",
@@ -52,6 +69,20 @@
     "npm": ">= 3",
     "node": ">= 6"
   },
+  "dependencies": {
+    "@types/react": "^0.14.55",
+    "@types/react-dom": "^0.14.20",
+    "@types/d3-array": "^1.0.5",
+    "d3-array": "^1.0.1",
+    "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
+    "font-awesome": "^4.6.3",
+    "lineupjs": "github:Caleydo/lineupjs#master",
+    "mobx": "^2.6.0",
+    "mobx-react": "^3.5.8",
+    "mobx-react-devtools": "^4.2.9",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
+  },
   "devDependencies": {
     "@types/jasmine": "2.5.35",
     "awesome-typescript-loader": "3.0.0-beta.17",
@@ -82,36 +113,5 @@
     "url-loader": "0.5.7",
     "webpack": "2.2.0",
     "webpack-dev-server": "2.2.0"
-  },
-  "dependencies": {
-    "@types/react": "^0.14.55",
-    "@types/react-dom": "^0.14.20",
-    "@types/d3-array": "^1.0.5",
-    "d3-array": "^1.0.1",
-    "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
-    "font-awesome": "^4.6.3",
-    "lineupjs": "github:Caleydo/lineupjs#master",
-    "mobx": "^2.6.0",
-    "mobx-react": "^3.5.8",
-    "mobx-react-devtools": "^4.2.9",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1"
-  },
-  "name": "snp_app",
-  "description": "",
-  "homepage": "https://phovea.caleydo.org",
-  "version": "1.0.0-SNAPSHOT",
-  "author": {
-    "name": "Samuel Gratzl",
-    "email": "samuel_gratzl@gmx.at",
-    "url": ""
-  },
-  "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://github.com/datavisyn/snp_app/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/datavisyn/snp_app.git"
   }
 }

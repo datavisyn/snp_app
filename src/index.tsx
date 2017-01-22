@@ -16,6 +16,7 @@ import {render} from 'react-dom';
 
 import {IScatterplotOptions, IScale} from './ItemScatterplot';
 import LocusZoom, {circleSymbol, scale} from './ItemScatterplot';
+import Anatomogram from 'datavisyn-anatomogram/src/react';
 import ManhattanPlot from './ManhattanPlot';
 import GeneExon, {IGene} from './GeneExon';
 import LineUp, {ILineUpConfig, ADataProvider, deriveColors, createActionDesc} from './ItemLineUp';
@@ -126,6 +127,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
         { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
       </section>
       <section>
+        <Anatomogram species="homo sapiens.male" />
         <div>
           Selection Info
         </div>

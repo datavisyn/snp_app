@@ -75,6 +75,7 @@
     "@types/d3-array": "^1.0.5",
     "d3-array": "^1.0.1",
     "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
+    "datavisyn-anatomogram": "github:datavisyn/datavisyn-anatomogram#master",
     "font-awesome": "^4.6.3",
     "lineupjs": "github:Caleydo/lineupjs#master",
     "mobx": "^2.6.0",

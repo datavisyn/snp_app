@@ -23,6 +23,7 @@ import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
 import {observer} from 'mobx-react';
 import DetailBand from 'snp_app/src/DetailBand';
+import Dialog from './Dialog';
 
 const state = new AppState();
 
@@ -129,6 +130,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
       </section>
       <section>
         <div>
+          <Dialog />
           Selection Info
         </div>
         {this.state && this.state.data &&

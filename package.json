@@ -82,7 +82,7 @@
     "mobx-react-devtools": "^4.2.9",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "datavisyn-anatomogram": "github:datavisyn/datavisyn-anatomogram#master",
+    "datavisyn-anatomogram": "github:datavisyn/datavisyn-anatomogram#datavisyn-anatomogram",
     "material-ui": "^0.16.7",
     "react-tap-event-plugin": "^2.0.1"
   },

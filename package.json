@@ -72,7 +72,9 @@
   "dependencies": {
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.20",
-    "@types/d3-array": "^1.0.5",
+    "@types/d3-array": "^1.0.5",    
+    "@types/material-ui": "^0.16.47",
+    "@types/react-tap-event-plugin": "0.0.30",
     "d3-array": "^1.0.1",
     "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
     "font-awesome": "^4.6.3",
@@ -82,7 +84,7 @@
     "mobx-react-devtools": "^4.2.9",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "datavisyn-anatomogram": "github:datavisyn/datavisyn-anatomogram#anatomogram-bugfixes",
+    "datavisyn-anatomogram": "github:datavisyn/datavisyn-anatomogram#master",
     "material-ui": "^0.16.7",
     "react-tap-event-plugin": "^2.0.1"
   },
@@ -115,9 +117,6 @@
     "typescript": "2.1.5",
     "url-loader": "0.5.7",
     "webpack": "2.2.0",
-    "webpack-dev-server": "2.2.0",
-    "@types/material-ui": "^0.16.47",
-    "@types/react-tap-event-plugin": "0.0.30"
-
+    "webpack-dev-server": "2.2.0"
   }
 }

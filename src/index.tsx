@@ -116,6 +116,8 @@ function toState(genes: IGene[], snp: any[]) {
   state.locusZoomOffset = locusZoomOffset;
   //set the window that is visible
   state.windowLocusZoom = chromStartExtent;
+  // reset selection for new data
+  state.selection = [];
 
   return {data, options, desc, genes};
 }

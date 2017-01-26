@@ -45,6 +45,25 @@ svg.detailBand {
   }
 }
 
+.datavisyn-gene-exon {
+  line {
+    stroke: black
+  }
+  g.gene {
+    &:hover {
+      text {
+        fill: orange;
+      }
+      line {
+        stroke: orange;
+      }
+    }
+    text {
+      font-family: sans-serif;
+      font-size: 10px;
+    }
+  }
+}
 
 .selected {
   background-color: red;

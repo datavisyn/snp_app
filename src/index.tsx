@@ -23,7 +23,6 @@ import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
 import {reaction} from 'mobx';
 import {observer} from 'mobx-react';
-import DetailBand from 'snp_app/src/DetailBand';
 import Dialog from './Dialog';
 
 const state = new AppState();
@@ -132,7 +131,6 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
     return <section>
       <section style={{width: '50vw'}}>
         <ManhattanPlot state={this.props.state}/>
-        { this.state && this.state.data && <DetailBand state={this.props.state}/>}
         { this.state && this.state.data &&
         <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
                    chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}

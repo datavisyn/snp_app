@@ -56,6 +56,7 @@ export class Item {
 
 export default class AppState {
   @observable selection: Item[] = [];
+  @observable bookmarks: Item[] = [];
 
   @observable significance: number = 5; //10^-5
   @observable window: IWindow = null;

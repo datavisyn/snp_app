@@ -19,34 +19,29 @@ class ItemLineUp extends LineUp<Item> {
 
 }
 
-const lineupOptions: ILineUpConfig = {
-  body: {
-    actions: [{
-      name: 'Comment',
-      icon: '\uf0e5', //'fa-comment-o',
-      action: (row: Item) => {
-        console.log('comment button pressed for Item', row);
-      }
-    }, {
-      name: 'Bookmark',
-      icon: '\uf097', //'fa-bookmark-o',
-      action: (row: Item) => {
-        console.log('bookmark for Item', row);
-      }
-    }, {
-      name: 'Open Details',
-      icon: '\uf002', //'fa-search',
-      action: (row: Item) => {
-        console.log('open details for Item', row);
-      }
-    }]
-  }
-};
 
 
 @observer
 export default class ObservedLineUp extends React.Component<{data: Item[], state: AppState, desc: any[]},{}> {
   private chromStartColumn: NumberColumn;
+
+  private config: ILineUpConfig = {
+    body: {
+      actions: [{
+        name: 'Comment',
+        icon: '\uf0e5', //'fa-comment-o',
+        action: this.onComment.bind(this)
+      }, {
+        name: 'Bookmark',
+        icon: '\uf097', //'fa-bookmark-o',
+        action: this.onBookmark.bind(this)
+      }, {
+        name: 'Open Details',
+        icon: '\uf002', //'fa-search',
+        action: this.onDetails.bind(this)
+      }]
+    }
+  };
 
   render() {
     const {selection, filterLineUpToLocusZoomWindow, windowLocusZoom} = this.props.state;
@@ -58,9 +53,27 @@ export default class ObservedLineUp extends React.Component<{data: Item[], state
         this.chromStartColumn.setFilter();
       }
     }
-    return <ItemLineUp data={this.props.data} desc={this.props.desc} options={lineupOptions}
+    return <ItemLineUp data={this.props.data} desc={this.props.desc} options={this.config}
                        selection={selection.slice()} onSelectionChanged={this.onSelectionChanged.bind(this)}
                        defineLineUp={this.defineLineUp.bind(this)}/>;
+  }
+
+  private onComment(row: Item) {
+    console.log('comment button pressed for Item', row);
+  }
+
+  @action
+  private onBookmark(row: Item) {
+    const act = this.props.state.bookmarks;
+    if (act.indexOf(row) >= 0) {
+      act.splice(act.indexOf(row), 1);
+    } else {
+      act.push(row);
+    }
+  }
+
+  private onDetails(row: Item) {
+    console.log('comment button pressed for Item', row);
   }
 
   static deriveLineUpDescription(data: Item[], pvalMin: number) {

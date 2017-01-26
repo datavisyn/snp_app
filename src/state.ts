@@ -65,7 +65,7 @@ export default class AppState {
 
   @observable windowManhattan: number[] = null;
 
-  @observable filterLineUpToLocusZoomWindow = false;
+  @observable filterLineUpToLocusZoomWindow: boolean = false;
 
   @computed
   get windowAbsoluteLocusZoom() {

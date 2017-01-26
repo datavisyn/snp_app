@@ -50,8 +50,13 @@ export default class ObservedLineUp extends React.Component<{data: Item[], state
 
   render() {
     const {selection, filterLineUpToLocusZoomWindow, windowLocusZoom} = this.props.state;
-    if (this.chromStartColumn && filterLineUpToLocusZoomWindow && windowLocusZoom) {
-      this.chromStartColumn.setFilter({ min: windowLocusZoom[0], max: windowLocusZoom[1], filterMissing: false});
+    if (this.chromStartColumn) {
+      if (filterLineUpToLocusZoomWindow && windowLocusZoom) {
+        this.chromStartColumn.setFilter({ min: windowLocusZoom[0], max: windowLocusZoom[1], filterMissing: false});
+      } else {
+        // reset
+        this.chromStartColumn.setFilter();
+      }
     }
     return <ItemLineUp data={this.props.data} desc={this.props.desc} options={lineupOptions}
                        selection={selection.slice()} onSelectionChanged={this.onSelectionChanged.bind(this)}

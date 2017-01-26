@@ -95,7 +95,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
   }
 
   @action
-  private toggleFilter(value: boolean) {
+  private toggleFilter(item: any, value: boolean) {
     this.props.state.filterLineUpToLocusZoomWindow = value;
   }
 

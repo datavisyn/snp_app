@@ -8,7 +8,7 @@ import {observer} from 'mobx-react';
 import {action} from 'mobx';
 import AppState, {Item} from './state';
 import {ISymbol, ERenderMode} from 'datavisyn-scatterplot/src/symbol';
-import Scatterplot, {IWindow} from 'datavisyn-scatterplot/src';
+import Scatterplot, {IWindow, IScale} from 'datavisyn-scatterplot/src';
 
 
 export {IScatterplotOptions, scale} from 'datavisyn-scatterplot-react/src';
@@ -59,6 +59,19 @@ export function circleSymbol(fillStyle: string = 'steelblue', size = 20, diamond
       }
     };
   };
+}
+
+
+export function renderSignificanceLine(state: AppState, ctx: CanvasRenderingContext2D, xscale: IScale, yscale: IScale) {
+  const signifiance = state.significance;
+  const y = yscale(signifiance) + 1; // don't know the offset
+  const x0x1 = xscale.domain().map(xscale);
+  ctx.beginPath();
+  ctx.moveTo(x0x1[0], y);
+  ctx.lineTo(x0x1[1], y);
+  ctx.setLineDash([5, 5]);
+  ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+  ctx.stroke();
 }
 
 

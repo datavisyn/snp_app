@@ -5,6 +5,13 @@
 import {observable, computed} from 'mobx';
 import {IWindow} from './ManhattanPlot';
 
+
+export const ACGT = [
+  {label: 'c', color: 'red'},
+  {label: 't', color: 'cyan'},
+  {label: 'a', color: 'blue'},
+  {label: 'g', color: 'yellow'}];
+
 export class Item {
   readonly refsnpId: string;
   readonly chrName: string;
@@ -57,6 +64,8 @@ export default class AppState {
   @observable windowLocusZoom: number[] = null;
 
   @observable windowManhattan: number[] = null;
+
+  @observable filterLineUpToLocusZoomWindow = false;
 
   @computed
   get windowAbsoluteLocusZoom() {

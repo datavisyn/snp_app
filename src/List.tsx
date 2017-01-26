@@ -3,6 +3,7 @@
  */
 
 import * as React from 'react';
+import {action} from 'mobx';
 import {observer} from 'mobx-react';
 import AppState, {Item} from './state';
 
@@ -16,6 +17,7 @@ export default class ObservedList extends React.Component<{ data: Item[], state:
     </ul>;
   }
 
+  @action
   private onClick(d: Item) {
     const s = this.props.state.selection;
     if (s.indexOf(d) >= 0) {

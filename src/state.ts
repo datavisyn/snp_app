@@ -3,7 +3,7 @@
  */
 
 import {observable} from 'mobx';
-import {IWindow, IChromosome} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
+import {IWindow} from './ManhattanPlot';
 
 export class Item {
   readonly refsnpId: string;

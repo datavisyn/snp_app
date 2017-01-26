@@ -16,11 +16,12 @@ import {render} from 'react-dom';
 
 import {IScatterplotOptions, IScale} from './ItemScatterplot';
 import LocusZoom, {circleSymbol, scale} from './ItemScatterplot';
-import ManhattanPlot from './ManhattanPlot';
+import ManhattanPlot, {IWindow} from './ManhattanPlot';
 import GeneExon, {IGene} from './GeneExon';
 import LineUp, {ILineUpConfig, ADataProvider, deriveColors, createActionDesc} from './ItemLineUp';
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
+import {reaction} from 'mobx';
 import {observer} from 'mobx-react';
 import DetailBand from 'snp_app/src/DetailBand';
 import Dialog from './Dialog';
@@ -115,13 +116,22 @@ function toState(genes: IGene[], snp: any[]) {
   return {data, options, desc, genes};
 }
 
+
 @observer
 class ObservedRootElement extends React.Component<{state: AppState},{data: Item[], genes: IGene[], desc: any[], options: IScatterplotOptions<Item>}> {
+  constructor(props, context) {
+    super(props, context);
+
+    // if the window or significance changes trigger a loading operation
+    reaction(
+      () => ({window: this.props.state.window, significance: this.props.state.significance}),
+      (args: {window: IWindow, significance: number}) => this.onLoad(args.window, args.significance)
+    );
+  }
   render() {
     return <section>
       <section style={{width: '50vw'}}>
         <ManhattanPlot state={this.props.state}/>
-        <button onClick={this.onLoad.bind(this)}>Load Window</button>
         { this.state && this.state.data && <DetailBand state={this.props.state}/>}
         { this.state && this.state.data &&
         <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
@@ -140,9 +150,7 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
     </section>;
   }
 
-  private onLoad() {
-    const w = state.window;
-    const significance = state.significance;
+  private onLoad(w: IWindow, significance: number) {
     if (w) {
       console.log('get data');
       const fetchSNP: Promise<any[]> = (self as any).fetch(`/api/data?from_chromosome=${w.fromChromosome}&from_location=${w.fromLocation}&to_chromosome=${w.toChromosome}&to_location=${w.toLocation}&geq_significance=${significance}`)

@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import LineUp, {} from 'lineupjs/src/react';
+import {action} from 'mobx';
 import {observer} from 'mobx-react';
 import AppState, {Item} from './state';
 import {ILineUpConfig} from 'lineupjs/src/lineup';
@@ -26,7 +27,7 @@ export default class ObservedLineUp extends React.Component<{ data: Item[], stat
     return <ItemLineUp data={this.props.data} desc={this.props.desc} options={this.props.options} selection={selection.slice()} onSelectionChanged={this.onSelectionChanged.bind(this)} defineLineUp={this.props.defineLineUp} />;
   }
 
-
+  @action
   private onSelectionChanged(selection: Item[]) {
     console.log('set state');
     this.props.state.selection = selection;

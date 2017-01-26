@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Anatomogram from 'datavisyn-anatomogram/src/react';
-import {observable} from 'mobx';
+import {observable, action} from 'mobx';
 
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
 import {observer} from 'mobx-react/native';
@@ -22,6 +22,7 @@ export default class Dialog extends React.Component<undefined, undefined> {
 
   @observable showDialog: boolean = false;
 
+  @action
   toggleDialog() {
     this.showDialog = !this.showDialog;
   }

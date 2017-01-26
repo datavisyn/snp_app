@@ -4,8 +4,11 @@
 
 import * as React from 'react';
 import {observer} from 'mobx-react';
+import {action} from 'mobx';
 import AppState from './state';
 import ManhattanPlot, {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
+
+export {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
 
 @observer
 export default class ObservedManhattanPlot extends React.Component<{state: AppState},{}> {
@@ -17,14 +20,17 @@ export default class ObservedManhattanPlot extends React.Component<{state: AppSt
                           onMetadataLoaded={this.onMetaDataLoaded.bind(this)}/>;
   }
 
+  @action
   private onMetaDataLoaded(xlim: number[]) {
     this.props.state.windowManhattan = xlim;
   }
 
+  @action
   private onSignificanceChanged(sig: number) {
     this.props.state.significance = sig;
   }
 
+  @action
   private onWindowChanged(window: IWindow) {
     this.props.state.window = window;
   }

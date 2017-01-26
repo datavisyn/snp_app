@@ -13,7 +13,7 @@ export {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
 @observer
 export default class ObservedManhattanPlot extends React.Component<{state: AppState},{}> {
   render() {
-    return <ManhattanPlot serverUrl="/api" onSignificanceChanged={this.onSignificanceChanged.bind(this)}
+    return <ManhattanPlot serverUrl="/api" width={800} onSignificanceChanged={this.onSignificanceChanged.bind(this)}
                           geqSignificance={this.props.state.significance}
                           onWindowChanged={this.onWindowChanged.bind(this)} snapToChromosome={true}
                           detailWindow={this.props.state.windowAbsoluteLocusZoom}

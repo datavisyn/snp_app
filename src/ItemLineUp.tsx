@@ -29,7 +29,6 @@ export default class ObservedLineUp extends React.Component<{ data: Item[], stat
 
   @action
   private onSelectionChanged(selection: Item[]) {
-    console.log('set state');
     this.props.state.selection = selection;
   }
 }

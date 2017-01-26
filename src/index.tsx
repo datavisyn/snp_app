@@ -18,12 +18,15 @@ import {IScatterplotOptions} from './ItemScatterplot';
 import LocusZoom, {circleSymbol, scale, renderSignificanceLine} from './ItemScatterplot';
 import ManhattanPlot, {IWindow} from './ManhattanPlot';
 import GeneExon, {IGene} from './GeneExon';
+import SelectionInfo from './SelectionInfo';
 import LineUp from './ItemLineUp';
 import AppState, {Item} from './state';
 import {extent, max} from 'd3-array';
-import {reaction} from 'mobx';
+import {reaction, action} from 'mobx';
 import {observer} from 'mobx-react';
 import Dialog from './Dialog';
+import Toggle from 'material-ui/Toggle';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const state = new AppState();
 
@@ -79,13 +82,21 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
       </section>
       <section>
         <div>
+          <SelectionInfo state={this.props.state}/>
           <Dialog />
-          Selection Info
+          <MuiThemeProvider>
+            <Toggle label="Filter LineUp according to visible LocusZoom window" toggled={this.props.state.filterLineUpToLocusZoomWindow} onToggle={this.toggleFilter.bind(this)}/>
+          </MuiThemeProvider>
         </div>
         {this.state && this.state.data &&
         <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state}/>}
       </section>
     </section>;
+  }
+
+  @action
+  private toggleFilter(value: boolean) {
+    this.props.state.filterLineUpToLocusZoomWindow = value;
   }
 
   private onLoad(w: IWindow, significance: number) {

@@ -84,12 +84,14 @@ function renderSignificanceLine(ctx: CanvasRenderingContext2D, xscale: IScale, y
 
 function toState(genes: IGene[], snp: any[]) {
   const data = snp.map((r) => new Item(r));
-  const chromStartExtent = extent(data, (d) => d.absChromStart);
+
+
+  const chromStartExtent = extent(data, (d) => d.chromStart);
   const pvalMin = Math.min(60, 5 + max(data, (d) => d.mlogpval)); // rounding error
   const desc = [
     {type: 'string', column: 'refsnpId'},
     {type: 'string', column: 'chrName'},
-    {type: 'number', column: 'absChromStart', domain: chromStartExtent},
+    {type: 'number', column: 'chromStart', domain: chromStartExtent},
     {type: 'categorical', column: 'allele1', categories: ACGT},
     {type: 'categorical', column: 'allele2', categories: ACGT},
     {type: 'number', column: 'freqA1', domain: extent(data, (d) => d.freqA1)},
@@ -101,7 +103,7 @@ function toState(genes: IGene[], snp: any[]) {
   ];
   deriveColors(desc as any);
   const options: IScatterplotOptions<Item> = {
-    x: (d: Item) => d.absChromStart,
+    x: (d: Item) => d.chromStart,
     y: (d: Item) => d.mlogpval,
     xscale: scale.scaleLinear().domain(chromStartExtent),
     yscale: scale.scaleLinear().domain([0, pvalMin]).clamp(true),
@@ -109,6 +111,9 @@ function toState(genes: IGene[], snp: any[]) {
     extras: renderSignificanceLine
   };
 
+  // for having local data in the locuszoom but can convert it to absolute data
+  const locusZoomOffset = data[0].absChromStart - data[0].chromStart;
+  state.locusZoomOffset = locusZoomOffset;
   //set the window that is visible
   state.windowLocusZoom = chromStartExtent;
 

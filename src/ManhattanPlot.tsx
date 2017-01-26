@@ -16,7 +16,7 @@ export default class ObservedManhattanPlot extends React.Component<{state: AppSt
     return <ManhattanPlot serverUrl="/api" onSignificanceChanged={this.onSignificanceChanged.bind(this)}
                           geqSignificance={this.props.state.significance}
                           onWindowChanged={this.onWindowChanged.bind(this)} snapToChromosome={true}
-                          detailWindow={this.props.state.windowLocusZoom}
+                          detailWindow={this.props.state.windowAbsoluteLocusZoom}
                           onMetadataLoaded={this.onMetaDataLoaded.bind(this)}/>;
   }
 

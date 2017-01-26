@@ -14,7 +14,7 @@ export {IGene} from 'datavisyn-scatterplot-react/src/GeneExon';
 export default class ObservedGeneExon extends React.Component<{data: IGene[], state: AppState},{}> {
   render() {
     const {data} = this.props;
-    const {windowLocusZoom} = this.props.state;
-    return <GeneExon genes={data} serverUrl="./api" absLocationMin={windowLocusZoom[0]} absLocationMax={windowLocusZoom[1]} />;
+    const {windowAbsoluteLocusZoom} = this.props.state;
+    return <GeneExon genes={data} serverUrl="./api" absLocationMin={windowAbsoluteLocusZoom[0]} absLocationMax={windowAbsoluteLocusZoom[1]} />;
   }
 }

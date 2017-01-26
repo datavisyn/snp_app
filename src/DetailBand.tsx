@@ -20,8 +20,8 @@ export default class DetailBand extends React.Component<{state: AppState},{width
   }
 
   render() {
-    const {windowManhattan, windowLocusZoom} = this.props.state;
-    if (windowManhattan == null || windowLocusZoom == null) {
+    const {windowManhattan, windowAbsoluteLocusZoom} = this.props.state;
+    if (windowManhattan == null || windowAbsoluteLocusZoom == null) {
       return;
     }
     const width = this.state.width;
@@ -32,8 +32,8 @@ export default class DetailBand extends React.Component<{state: AppState},{width
       .domain(windowManhattan)
       .range([marginManhattan.left, width - marginManhattan.right]);
 
-    const xPos = xscale(windowLocusZoom[0]);
-    const xPos2 = xscale(windowLocusZoom[1]);
+    const xPos = xscale(windowAbsoluteLocusZoom[0]);
+    const xPos2 = xscale(windowAbsoluteLocusZoom[1]);
     return <svg className="detailBand" preserveAspectRatio="xMinYMax" viewBox={`0,0,${width},30`} height="30"
                 width="100%" ref={(svg) => this.updateSize(svg as Element)}>
       <path d={`M${xPos},0 L${marginLocusZoom.left},30 L${width-marginLocusZoom.right},30 L${xPos2},0 Z`}/>

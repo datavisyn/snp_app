@@ -2,7 +2,7 @@
  * Created by sam on 29.10.2016.
  */
 
-import {observable} from 'mobx';
+import {observable, computed} from 'mobx';
 import {IWindow} from './ManhattanPlot';
 
 export class Item {
@@ -53,6 +53,13 @@ export default class AppState {
   @observable significance: number = 5; //10^-5
   @observable window: IWindow = null;
 
+  @observable locusZoomOffset: number = 0;
   @observable windowLocusZoom: number[] = null;
+
   @observable windowManhattan: number[] = null;
+
+  @computed
+  get windowAbsoluteLocusZoom() {
+    return this.windowLocusZoom ? this.windowLocusZoom.map((d) => d + this.locusZoomOffset) : null;
+  }
 }

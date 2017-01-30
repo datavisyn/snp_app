@@ -66,7 +66,7 @@ def manhattan_get(width=None, height=None, geq_significance=None, plain=None):
   import os.path
 
   file_name = 'manhattan_{w}_{h}_{s}_{p}.png'.format(w=width, h=height, s=geq_significance, p=plain)
-  cache_key = os.path.normpath(os.path.dirname(__file__) + '/../tmp/' + file_name)
+  cache_key = os.path.normpath(os.path.dirname(__file__) + '/../local_cache/' + file_name)
 
   if os.path.isfile(cache_key):
     with open(cache_key) as f:

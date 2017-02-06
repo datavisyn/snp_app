@@ -25,13 +25,21 @@ section {
   }
 
   section {
-    height: 50vh;
+    min-height: 50vh;
+  }
 
-    &.lineup {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
+  #snp-lineup, #snp-scatterplot {
+    display: none;
+  }
+
+  #snp-scatterplot.active {
+    display: block;
+  }
+
+  #snp-lineup.active {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
 

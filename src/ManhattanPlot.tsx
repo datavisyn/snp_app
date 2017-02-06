@@ -32,7 +32,9 @@ export default class ObservedManhattanPlot extends React.Component<{state: AppSt
 
   @action
   private onWindowChanged(w: IWindow) {
-    const scatterplotElement = document.querySelector('.test-class');
+    const scatterplotElement = document.querySelector('#snp-scatterplot');
+    scatterplotElement.classList.add('active')
+    document.querySelector('#snp-lineup').classList.add('active');
     window.scrollTo(0, scatterplotElement.getBoundingClientRect().top);
     this.props.state.window = w;
   }

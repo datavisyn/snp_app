@@ -11,13 +11,14 @@ import ManhattanPlot, {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanP
 export {IWindow} from 'datavisyn-scatterplot-react/src/ManhattanPlot';
 
 @observer
-export default class ObservedManhattanPlot extends React.Component<{state: AppState},{}> {
+export default class ObservedManhattanPlot extends React.Component<{state: AppState, width?: number},{}> {
   render() {
-    return <ManhattanPlot xAxisLabel="Chromosome" yAxisLabel="-log10 p-value" serverUrl="/api" width={800} onSignificanceChanged={this.onSignificanceChanged.bind(this)}
+    const width = this.props.width || window.innerWidth - 30;
+    return <ManhattanPlot xAxisLabel="Chromosome" yAxisLabel="-log10 p-value" serverUrl="/api" onSignificanceChanged={this.onSignificanceChanged.bind(this)}
                           geqSignificance={this.props.state.significance}
                           onWindowChanged={this.onWindowChanged.bind(this)} snapToChromosome={true}
                           detailWindow={this.props.state.windowAbsoluteLocusZoom}
-                          onMetadataLoaded={this.onMetaDataLoaded.bind(this)}/>;
+                          onMetadataLoaded={this.onMetaDataLoaded.bind(this)} width={width}/>;
   }
 
   @action
@@ -35,7 +36,7 @@ export default class ObservedManhattanPlot extends React.Component<{state: AppSt
     const scatterplotElement = document.querySelector('#snp-scatterplot');
     scatterplotElement.classList.add('active')
     document.querySelector('#snp-lineup').classList.add('active');
-    window.scrollTo(0, scatterplotElement.getBoundingClientRect().top);
+    window.scrollTo(0, window.pageYOffset + scatterplotElement.getBoundingClientRect().top);
     this.props.state.window = w;
   }
 }

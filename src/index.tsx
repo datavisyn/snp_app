@@ -27,9 +27,11 @@ import {observer} from 'mobx-react';
 import Dialog from './Dialog';
 import Toggle from 'material-ui/Toggle';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {AppHeader, AppHeaderLink} from 'datavisyn_ui/src/header';
 
 const state = new AppState();
 
+const appHeader = new AppHeader(document.querySelector('header'), { appLink: new AppHeaderLink('SNPology') });
 
 function toState(genes: IGene[], snp: any[]) {
   const data = snp.map((r) => new Item(r));
@@ -73,23 +75,25 @@ class ObservedRootElement extends React.Component<{state: AppState},{data: Item[
   }
   render() {
     return <section>
-      <section style={{width: '50vw'}}>
+      <Dialog />
+      <section>
         <ManhattanPlot state={this.props.state}/>
+      </section>
+      <section className="test-class">
         { this.state && this.state.data &&
         <LocusZoom data={this.state.data} state={this.props.state} options={this.state.options}
                    chromosome={`Chromosome ${this.state.data[0].chrName}`}/>}
         { this.state && this.state.genes && <GeneExon data={this.state.genes} state={this.props.state}/>}
       </section>
-      <section>
+      <section className="lineup">
+        {this.state && this.state.data &&
+        <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state}/>}
         <div>
-          <SelectionInfo state={this.props.state}/>
-          <Dialog />
           <MuiThemeProvider>
             <Toggle label="Filter LineUp according to visible LocusZoom window" toggled={this.props.state.filterLineUpToLocusZoomWindow} onToggle={this.toggleFilter.bind(this)}/>
           </MuiThemeProvider>
+          <SelectionInfo state={this.props.state}/>
         </div>
-        {this.state && this.state.data &&
-        <LineUp data={this.state.data} desc={this.state.desc} state={this.props.state}/>}
       </section>
     </section>;
   }

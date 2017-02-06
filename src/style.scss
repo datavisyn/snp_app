@@ -1,14 +1,6 @@
 
 
 section {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-
-  > * {
-    flex: 1 1 auto;
-  }
-
   .lu {
     height: 40vh;
     overflow-y: auto;
@@ -33,8 +25,13 @@ section {
   }
 
   section {
-    flex-direction: column;
-    align-items: stretch;
+    height: 50vh;
+
+    &.lineup {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 }
 

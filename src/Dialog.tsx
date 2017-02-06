@@ -15,7 +15,7 @@ injectTapEventPlugin();
 
 const customStyle = {
   width: '500px',
-  height: '600px'
+  height: '500px'
 };
 
 @observer

@@ -1,14 +1,6 @@
 
 
 section {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-
-  > * {
-    flex: 1 1 auto;
-  }
-
   .lu {
     height: 40vh;
     overflow-y: auto;
@@ -33,8 +25,22 @@ section {
   }
 
   section {
-    flex-direction: column;
-    align-items: stretch;
+    min-height: 50vh;
+    padding: 20px 10px;
+  }
+
+  #snp-lineup, #snp-scatterplot {
+    display: none;
+  }
+
+  #snp-scatterplot.active {
+    display: block;
+  }
+
+  #snp-lineup.active {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
 

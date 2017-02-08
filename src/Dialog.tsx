@@ -14,7 +14,8 @@ import {observer} from 'mobx-react/native';
 injectTapEventPlugin();
 
 const customStyle = {
-  width: '500px'
+  width: '500px',
+  height: '500px'
 };
 
 @observer

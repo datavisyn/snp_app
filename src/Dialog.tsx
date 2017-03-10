@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Anatomogram from 'datavisyn-anatomogram/src/react';
+import bundled from 'datavisyn-anatomogram/src/loader';
 import {observable, action} from 'mobx';
 
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
@@ -44,7 +45,7 @@ export default class Dialog extends React.Component<undefined, undefined> {
         </MuiThemeProvider>
         <MuiThemeProvider>
           <UIDialog title="Anatomogram" open={this.showDialog} actions={actions} contentStyle={customStyle}>
-            <Anatomogram species="homo sapiens.male" selectClass="datavisyn-selected"
+            <Anatomogram species="homo sapiens.male" selectClass="datavisyn-selected" imageLoader={bundled}
                          defaultClass="datavisyn-default"/>
           </UIDialog>
         </MuiThemeProvider>

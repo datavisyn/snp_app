@@ -14,5 +14,5 @@ COPY ./snp_app ./snp_app
 COPY ./data ./data
 COPY ./local_cache ./local_cache
 
-CMD python snp_app
-EXPOSE 9000
+CMD gunicorn -b 0.0.0.0:8000 --log-file - snp_app.server:app
+EXPOSE 8000

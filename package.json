@@ -75,7 +75,7 @@
     "@types/d3-array": "^1.0.5",
     "@types/material-ui": "^0.16.47",
     "@types/react-tap-event-plugin": "0.0.30",
-    "@types/handlebars": "4.0.33"
+    "@types/handlebars": "4.0.33",
     "d3-array": "^1.0.1",
     "datavisyn-scatterplot-react": "github:datavisyn/datavisyn-scatterplot-react#master",
     "font-awesome": "^4.6.3",
